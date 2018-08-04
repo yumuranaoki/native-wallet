@@ -7,7 +7,9 @@ import { generateMnemonicWord, fromSeed } from './mnemonicWord';
 class Wallet {
   constructor() {
     this.mnemonicWord = null;
+    this.bytePrivateKey = null;
     this.privateKey = null;
+    this.bytePublicKey = null;
     this.publicKey = null;
     this.address = '';
   }
@@ -19,33 +21,50 @@ class Wallet {
 
   async generatePrivateKey() {
     if (this.mnemonicWord) {
-      const [privateKey, chainCode] = fromSeed(this.mnemonicWord, '');
+      const [bytePrivateKey, chainCode] = fromSeed(this.mnemonicWord, '');
+      this.privateKey = bytePrivateKey;
+      let privateKey = '';
+      bytePrivateKey.map(byte => {
+        let byteString = byte.toString(16); 
+        byteString = byteString <= 16 ? `0${byteString}` : byteString;
+        privateKey += byteString;
+      }).join('');
       this.privateKey = privateKey;
     }
   }
 
   async generatePublicKey() {
     if (this.privateKey) {
-      this.publicKey = eccrypto.getPublic(this.privateKey);
+      this.bytePublicKey = eccrypto.getPublic(this.privateKey);
+      let publicKey = '';
+      this.bytePublicKey.map(byte => {
+        let byteString = byte.toString(16);
+        byteString = byteString <= 16 ? `0${byteString}` : byteString;
+        publicKey += byteString;
+      }).join('');
+      this.publicKey = publicKey;
     }
   }
 
   async generateAddress() {
-    const address = keccak256(this.publicKey.slice(1)).slice(24);
-    const keccak256Address = keccak256(address);
-    for (let i = 0; i < 40; i++) {
-        if (parseInt(keccak256Address[i], 16) >= 8 && !Number(address[i])) {
-            this.address += address[i].toUpperCase();
-        } else {
-            this.address += address[i];
+    if (this.publicKey) {
+        const address = keccak256(this.publicKey.slice(1)).slice(24);
+        const keccak256Address = keccak256(address);
+        for (let i = 0; i < 40; i++) {
+            if (parseInt(keccak256Address[i], 16) >= 8 && !Number(address[i])) {
+                this.address += address[i].toUpperCase();
+            } else {
+                this.address += address[i];
+            }
         }
+        this.address = `0x${this.address}`;
+        console.log(this.address);
     }
-    this.address = `0x${this.address}`;
   }
 
   async getNonce() {
     return new Promise((resolve) => {
-        const ethGetTransactionCount = {
+      const ethGetTransactionCount = {
             jsonrpc: '2.0', 
             method: 'eth_getTransactionCount', 
             params: [this.address, 'latest'], 
@@ -103,39 +122,39 @@ async signTransaction(txParams) {
       transaction.chainId = txParams.chainId;
       return new Promise(resolve => {
           const tx = new EthereumTx(transaction);
-          tx.sign(this.privateKey);
+          tx.sign(this.privateKey); // ここはprivate keyをbyteで扱う
           resolve(tx);
       });
   }
 }
 
 // promiseを返してコードの汎用性を高める
-async sendRawTransaction(txParams) {
-    const signedTransaction = await this.signTransaction(txParams);
-    if (signedTransaction) {
+    async sendRawTransaction(txParams) {
+        const signedTransaction = await this.signTransaction(txParams);
+        if (signedTransaction) {
         const serializedTx = signedTransaction.serialize();
         const rawTx = `0x${serializedTx.toString('hex')}`;
         const ethSendRawTransaction = {
             jsonrpc: '2.0',
             method: 'eth_sendRawTransaction',
             params: [rawTx],
-            id: 42 //さすがにmainnetで試せないが選べるように
+            id: 42 // 選べるようにする
         };
         return new Promise((resolve) => {
-          fetch('https://kovan.infura.io/Y80MvxYEzKUddrYMy9Xj', {
-            method: 'POST',
-            body: JSON.stringify(ethSendRawTransaction),
-            headers: new Headers({
-                'Content-Type': 'application/json'
-            })
-          })
-          .then(res => res.json())
-          .then(res => res.result)
-          .then(res => resolve(res))
-          .catch(err => console.log(err));
-        });
+                fetch('https://kovan.infura.io/Y80MvxYEzKUddrYMy9Xj', {
+                method: 'POST',
+                body: JSON.stringify(ethSendRawTransaction),
+                headers: new Headers({
+                    'Content-Type': 'application/json'
+                })
+                })
+                .then(res => res.json())
+                .then(res => res.result)
+                .then(res => resolve(res))
+                .catch(err => console.log(err));
+            });
+        }
     }
-}
 }
 
 export default Wallet;

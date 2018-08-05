@@ -5,13 +5,20 @@ import EthereumTx from 'ethereumjs-tx';
 import { generateMnemonicWord, fromSeed } from './mnemonicWord';
 
 class Wallet {
-  constructor(mnemonicWord = null, privateKey = null, publicKey = null, address = '') {
-    this.mnemonicWord = mnemonicWord;
-    this.bytePrivateKey = null;
-    this.privateKey = privateKey;
-    this.bytePublicKey = null;
-    this.publicKey = publicKey;
-    this.address = address;
+  constructor(
+        mnemonicWord = null,
+        bytePrivateKey = null,
+        privateKey = null,
+        bytePublicKey = null,
+        publicKey = null,
+        address = ''
+    ) {
+        this.mnemonicWord = mnemonicWord;
+        this.bytePrivateKey = bytePrivateKey;
+        this.privateKey = privateKey;
+        this.bytePublicKey = bytePublicKey;
+        this.publicKey = publicKey;
+        this.address = address;
   }
 
   async setMnemonicWord() {
@@ -35,9 +42,10 @@ class Wallet {
   }
 
   async generatePublicKey() {
-    if (this.privateKey) {
+    if (this.bytePrivateKey) {
       this.bytePublicKey = eccrypto.getPublic(this.bytePrivateKey);
       let publicKey = '';
+      console.log(this.bytePublicKey);
       this.bytePublicKey.map(byte => {
         let byteString = byte.toString(16);
         byteString = byteString <= 16 ? `0${byteString}` : byteString;

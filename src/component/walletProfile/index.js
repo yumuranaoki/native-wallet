@@ -18,9 +18,23 @@ class WalletProfile extends Component {
       if (walletInfo !== undefined) {
         const jsonWalletInfo = JSON.parse(walletInfo);
         const { mnemonicWord, privateKey, publicKey, address } = jsonWalletInfo;
+        const bytePrivateKey = [];
+        for (let i = 0; i <= 31; i++) {
+          const strBuf = privateKey.slice(2 * i, (2 * i) + 2);
+          const byteBuf = parseInt(strBuf, 16);
+          bytePrivateKey.push(byteBuf);
+        }
+        const bytePublicKey = [];
+        for (let i = 0; i <= 64; i++) {
+          const strBuf = publicKey.slice(2 * i, (2 * i) + 2);
+          const byteBuf = parseInt(strBuf, 16);
+          bytePublicKey.push(byteBuf);
+        }
         wallet = new Wallet(
           mnemonicWord,
+          bytePrivateKey,
           privateKey,
+          bytePublicKey,
           publicKey,
           address,
         );

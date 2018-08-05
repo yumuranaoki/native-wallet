@@ -89,8 +89,7 @@ class Wallet {
 }
 
 async getBalance() {
-  if (this.privateKey) {
-    console.log(this.address);
+  if (this.address) {
     const ethGetBalance = {
         jsonrpc: '2.0',
         method: 'eth_getBalance',

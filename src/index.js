@@ -17,28 +17,44 @@ class App extends Component {
     // SInfoからprivateKeyとpublicKeyを取得
     // privateKeyとpublicKeyが取得できれば、stringからbytePrivateKey, bytePublicKeyを作成
     // error | null（depending on library）でwalletを作成
-    /*
     try {
       await SInfo.getItem('walletInfo', {
         sharedPreferencesName: 'plasmaWalletSharedPreference',
         keychainService: 'plasmaWalletKeyChain',
-      }).then(walletInfo => console.log(walletInfo));
+      }).then(walletInfo => {
+        const jsonWalletInfo = JSON.parse(walletInfo);
+        const { mnemonicWord, privateKey, publicKey, address } = jsonWalletInfo;
+        const wallet = new Wallet(
+          mnemonicWord,
+          privateKey,
+          publicKey,
+          address,
+        );
+        this.setState({ wallet });
+      });
     } catch (error) {
       console.log(error);
     }
-    
+    // 以下の処理をどこに書くか？
+    // addressがないuserには、walletを作成
+    // addressがあるuserにはaddressを引っ張ってくる
+    // SInfo.getItem()のコード次第
+    /*
     const wallet = new Wallet();
-    wallet.setMnemonicWord()
-    .then(() => wallet.generatePrivateKey())
-    .then(() => wallet.generatePublicKey())
-    .then(() => wallet.generateAddress())
-    .then(() => this.setState({ wallet }));
-    // ここでbyteではないprivateKeyとpublicKeyをSInfoにセット
+    await wallet.setMnemonicWord();
+    await wallet.generatePrivateKey();
+    await wallet.generatePublicKey();
+    await wallet.generateAddress();
+    this.setState({ wallet });
+    
     const walletInfo = {
+      mnemonicWord: wallet.mnemonicWord,
       privateKey: wallet.privateKey,
       publicKey: wallet.publicKey,
       address: wallet.address,
     };
+    
+    // ここでbyteではないprivateKeyとpublicKeyをSInfoにセット
     SInfo.setItem('walletInfo', JSON.stringify(walletInfo), {
       sharedPreferencesName: 'plasmaWalletSharedPreference',
       keychainService: 'plasmaWalletKeyChain'

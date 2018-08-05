@@ -5,13 +5,13 @@ import EthereumTx from 'ethereumjs-tx';
 import { generateMnemonicWord, fromSeed } from './mnemonicWord';
 
 class Wallet {
-  constructor() {
-    this.mnemonicWord = null;
+  constructor(mnemonicWord = null, privateKey = null, publicKey = null, address = '') {
+    this.mnemonicWord = mnemonicWord;
     this.bytePrivateKey = null;
-    this.privateKey = null;
+    this.privateKey = privateKey;
     this.bytePublicKey = null;
-    this.publicKey = null;
-    this.address = '';
+    this.publicKey = publicKey;
+    this.address = address;
   }
 
   async setMnemonicWord() {
@@ -22,7 +22,7 @@ class Wallet {
   async generatePrivateKey() {
     if (this.mnemonicWord) {
       const [bytePrivateKey, chainCode] = fromSeed(this.mnemonicWord, '');
-      this.privateKey = bytePrivateKey;
+      this.bytePrivateKey = bytePrivateKey;
       let privateKey = '';
       bytePrivateKey.map(byte => {
         let byteString = byte.toString(16); 
@@ -30,12 +30,13 @@ class Wallet {
         privateKey += byteString;
       }).join('');
       this.privateKey = privateKey;
+      return privateKey;
     }
   }
 
   async generatePublicKey() {
     if (this.privateKey) {
-      this.bytePublicKey = eccrypto.getPublic(this.privateKey);
+      this.bytePublicKey = eccrypto.getPublic(this.bytePrivateKey);
       let publicKey = '';
       this.bytePublicKey.map(byte => {
         let byteString = byte.toString(16);
@@ -43,6 +44,7 @@ class Wallet {
         publicKey += byteString;
       }).join('');
       this.publicKey = publicKey;
+      return publicKey;
     }
   }
 
@@ -59,6 +61,7 @@ class Wallet {
         }
         this.address = `0x${this.address}`;
         console.log(this.address);
+        return this.address;
     }
   }
 

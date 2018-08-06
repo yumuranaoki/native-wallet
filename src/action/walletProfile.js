@@ -3,6 +3,11 @@ export const onChangeToAddress = toAddress => ({
   toAddress,
 });
 
+export const onChangeValue = value => ({
+  type: 'ON_CHANGE_VALUE',
+  value,
+});
+
 export const setWallet = wallet => ({
   type: 'SET_WALLET',
   wallet,
@@ -22,7 +27,39 @@ const finishedGetBalance = balance => ({
   balance,
 });
 
-export const sendEther = (wallet, toAddress) => {
+export const sendEther = (wallet, balance, toAddress, value) => (
+  function (dispatch) {
+    const valueNum = Number(value);
+    if (
+      wallet.bytePrivateKey && 
+      balance * 1000000000000000000 >=
+      (valueNum * 1000000000000000000) + (4 * 21000)
+    ) {
+      console.log('これからtxParams');
+      const txParams = {
+        gasLimit: 21000,
+        gasPrice: 4,
+        toAddress,
+        value: valueNum * 1000000000000000000,
+        chainId: 42,
+      };
+      wallet.sendRawTransaction(txParams)
+      .then(result => dispatch(finishedSendEther(result)))
+      .catch(err => console.log(err));
+    }
+  }
+);
 
-  return { type: 'SEND_ETHER' };
-};
+const finishedSendEther = result => ({
+  type: 'FINISHED_SEND_ETHER',
+  result,
+});
+
+export const openModal = () => ({
+  type: 'OPEN_MODAL'
+});
+
+export const onSwipe = () => ({
+  type: 'ON_SWIPE'
+});
+

@@ -32,8 +32,8 @@ class Wallet {
       this.bytePrivateKey = bytePrivateKey;
       let privateKey = '';
       bytePrivateKey.map(byte => {
-        let byteString = byte.toString(16); 
-        byteString = byteString <= 16 ? `0${byteString}` : byteString;
+        let byteString = byte.toString(16);
+        byteString = byteString.length === 1 ? `0${byteString}` : byteString;
         privateKey += byteString;
       }).join('');
       this.privateKey = privateKey;
@@ -45,10 +45,9 @@ class Wallet {
     if (this.bytePrivateKey) {
       this.bytePublicKey = eccrypto.getPublic(this.bytePrivateKey);
       let publicKey = '';
-      console.log(this.bytePublicKey);
       this.bytePublicKey.map(byte => {
         let byteString = byte.toString(16);
-        byteString = byteString <= 16 ? `0${byteString}` : byteString;
+        byteString = byteString.length === 1 ? `0${byteString}` : byteString;
         publicKey += byteString;
       }).join('');
       this.publicKey = publicKey;
@@ -58,42 +57,46 @@ class Wallet {
 
   async generateAddress() {
     if (this.publicKey) {
-        const address = keccak256(this.publicKey.slice(1)).slice(24);
+        const address = keccak256(this.bytePublicKey.slice(1)).slice(24);
         const keccak256Address = keccak256(address);
+        let checkSumAddress = '';
         for (let i = 0; i < 40; i++) {
             if (parseInt(keccak256Address[i], 16) >= 8 && !Number(address[i])) {
-                this.address += address[i].toUpperCase();
+                checkSumAddress += address[i].toUpperCase();
             } else {
-                this.address += address[i];
+                checkSumAddress += address[i];
             }
         }
-        this.address = `0x${this.address}`;
+        this.address = `0x${checkSumAddress}`;
         console.log(this.address);
         return this.address;
     }
   }
 
   async getNonce() {
-    return new Promise((resolve) => {
-      const ethGetTransactionCount = {
-            jsonrpc: '2.0', 
-            method: 'eth_getTransactionCount', 
-            params: [this.address, 'latest'], 
-            id: 42
-        };
-        fetch('https://kovan.infura.io/Y80MvxYEzKUddrYMy9Xj', {
-            method: 'POST',
-            body: JSON.stringify(ethGetTransactionCount),
-            headers: new Headers({
-                'Content-Type': 'application/json'
+    console.log('nonce内部');
+    if (this.address) {
+        return new Promise((resolve) => {
+            const ethGetTransactionCount = {
+                jsonrpc: '2.0', 
+                method: 'eth_getTransactionCount', 
+                params: [this.address, 'latest'], 
+                id: 42
+            };
+            fetch('https://kovan.infura.io/Y80MvxYEzKUddrYMy9Xj', {
+                method: 'POST',
+                body: JSON.stringify(ethGetTransactionCount),
+                headers: new Headers({
+                    'Content-Type': 'application/json'
+                })
             })
-        })
-        .then(res => res.json())
-        .then(res => res.result)
-        .then(result => parseInt(result, 16))
-        .then(result => resolve(result))
-        .catch(err => console.log(err));
-    });
+            .then(res => res.json())
+            .then(res => res.result)
+            .then(result => parseInt(result, 16))
+            .then(result => resolve(result))
+            .catch(err => console.log(err));
+        });
+    }
 }
 
 async getBalance() {
@@ -121,9 +124,11 @@ async getBalance() {
 }
 
 async signTransaction(txParams) {
-  if (this.privateKey) {
+    console.log('sign内部');
+  if (this.bytePrivateKey) {
       const transaction = {};
       const nonce = await this.getNonce();
+      console.log(nonce);
       transaction.nonce = nonce;
       transaction.gasPrice = `0x${parseInt(txParams.gasPrice, 10).toString(16)}`;
       transaction.gasLimit = `0x${parseInt(txParams.gasLimit, 10).toString(16)}`;
@@ -132,7 +137,7 @@ async signTransaction(txParams) {
       transaction.chainId = txParams.chainId;
       return new Promise(resolve => {
           const tx = new EthereumTx(transaction);
-          tx.sign(this.privateKey); // ここはprivate keyをbyteで扱う
+          tx.sign(this.bytePrivateKey); // ここはprivate keyをbyteで扱う
           resolve(tx);
       });
   }
@@ -140,23 +145,25 @@ async signTransaction(txParams) {
 
 // promiseを返してコードの汎用性を高める
     async sendRawTransaction(txParams) {
+        console.log('sendraw内部');
         const signedTransaction = await this.signTransaction(txParams);
+        console.log(signedTransaction);
         if (signedTransaction) {
-        const serializedTx = signedTransaction.serialize();
-        const rawTx = `0x${serializedTx.toString('hex')}`;
-        const ethSendRawTransaction = {
-            jsonrpc: '2.0',
-            method: 'eth_sendRawTransaction',
-            params: [rawTx],
-            id: 42 // 選べるようにする
-        };
-        return new Promise((resolve) => {
+            const serializedTx = signedTransaction.serialize();
+            const rawTx = `0x${serializedTx.toString('hex')}`;
+            const ethSendRawTransaction = {
+                jsonrpc: '2.0',
+                method: 'eth_sendRawTransaction',
+                params: [rawTx],
+                id: 42 // 選べるようにする
+            };
+            return new Promise((resolve) => {
                 fetch('https://kovan.infura.io/Y80MvxYEzKUddrYMy9Xj', {
-                method: 'POST',
-                body: JSON.stringify(ethSendRawTransaction),
-                headers: new Headers({
-                    'Content-Type': 'application/json'
-                })
+                    method: 'POST',
+                    body: JSON.stringify(ethSendRawTransaction),
+                    headers: new Headers({
+                        'Content-Type': 'application/json'
+                    })
                 })
                 .then(res => res.json())
                 .then(res => res.result)

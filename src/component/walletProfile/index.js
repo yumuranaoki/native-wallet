@@ -1,6 +1,13 @@
 import '../../../shim';
 import React, { Component } from 'react';
-import { View, Text, Button, TextInput, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
+import Modal from 'react-native-modal';
 import SInfo from 'react-native-sensitive-info';
 import Wallet from '../../util/wallet';
 
@@ -18,26 +25,15 @@ class WalletProfile extends Component {
       if (walletInfo !== undefined) {
         const jsonWalletInfo = JSON.parse(walletInfo);
         const { mnemonicWord, privateKey, publicKey, address } = jsonWalletInfo;
-        const bytePrivateKey = [];
-        for (let i = 0; i <= 31; i++) {
-          const strBuf = privateKey.slice(2 * i, (2 * i) + 2);
-          const byteBuf = parseInt(strBuf, 16);
-          bytePrivateKey.push(byteBuf);
-        }
-        const bytePublicKey = [];
-        for (let i = 0; i <= 64; i++) {
-          const strBuf = publicKey.slice(2 * i, (2 * i) + 2);
-          const byteBuf = parseInt(strBuf, 16);
-          bytePublicKey.push(byteBuf);
-        }
         wallet = new Wallet(
           mnemonicWord,
-          bytePrivateKey,
+          null,
           privateKey,
-          bytePublicKey,
+          null,
           publicKey,
-          address,
+          address
         );
+        await wallet.generatePrivateKey();
         this.props.setWallet(wallet);
       } else {
         wallet = new Wallet();
@@ -74,29 +70,122 @@ class WalletProfile extends Component {
       wallet,
       balance,
       toAddress,
+      value,
+      isModalVisible,
       onChangeToAddress,
+      onChangeValue,
       sendEther,
+      openModal,
+      onSwipe,
     } = this.props;
     const styles = StyleSheet.create({
+      container: {
+        flex: 1,
+        alignItems: 'center',
+        paddingTop: 30,
+      },
       textInput: {
         borderBottomColor: 'black',
         borderBottomWidth: 1,
+        width: 200,
+        marginBottom: 30,
+        marginTop: 10,
+      },
+      modalView: {
+        backgroundColor: 'white',
+        borderRadius: 10,
+        flex: 1,
+        alignItems: 'center',
+        marginTop: 20,
+      },
+      buttonsAlign: {
+        flex: 1,
+        flexDirection: 'row',
+      },
+      getButton: {
+        width: 110,
+        height: 50,
+        borderRadius: 12,
+        backgroundColor: '#ff9966',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginLeft: 15,
+      },
+      sendButton: {
+        width: 110,
+        height: 50,
+        borderRadius: 12,
+        backgroundColor: '#00ff99',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginRight: 15,
+      },
+      button: {
+        width: 120,
+        height: 50,
+        borderRadius: 12,
+        backgroundColor: '#00ff99',
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+      buttonText: {
+        color: 'white',
+        fontSize: 18,
+        fontWeight: 'bold',
       }
     });
     return ( 
-      <View>
-        <Text>Hello from Plasma Wallet</Text>
+      <View style={styles.container}>
+        <Text style={{ fontSize: 18, marginBottom: 15 }}>
+          Hello from Plasma Wallet
+        </Text>
         <Text>{wallet ? wallet.address : ''}</Text>
-        <Text>Your Balance: {balance}ETH</Text>
-        <TextInput
-          style={styles.textInput}
-          value={toAddress}
-          onChangeText={text => onChangeToAddress(text)}
-        />
-        <Button
-          title='send ether'
-          onPress={() => sendEther(wallet, toAddress)}
-        />
+        <Text style={{ fontSize: 18, marginTop: 15, marginBottom: 15 }}>
+          Your Balance: {balance}ETH
+        </Text>
+        <View style={styles.buttonsAlign}>
+          <TouchableOpacity onPress={() => openModal()}>
+            <View style={styles.sendButton}>
+              <Text style={styles.buttonText}>
+                Send Ether
+              </Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => openModal()}>
+            <View style={styles.getButton}>
+              <Text style={styles.buttonText}>
+                Get Ether
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        <Modal 
+          isVisible={isModalVisible}
+          onSwipe={() => onSwipe()}
+          swipeDirection="down"
+          style={styles.modal}
+        >
+          <View style={styles.modalView}>
+            <Text style={{ marginTop: 20 }}>here you can input address</Text>
+            <TextInput
+              style={styles.textInput}
+              value={toAddress}
+              onChangeText={text => onChangeToAddress(text)}
+            />
+            <TextInput
+              style={styles.textInput}
+              value={value}
+              onChangeText={text => onChangeValue(text)}
+            />
+            <TouchableOpacity onPress={() => sendEther(wallet, balance, toAddress, value)}>
+              <View style={styles.button}>
+                <Text style={styles.buttonText}>
+                  Send Ether
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </Modal>
       </View>
     );
   }

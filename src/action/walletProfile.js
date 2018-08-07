@@ -55,11 +55,18 @@ const finishedSendEther = result => ({
   result,
 });
 
-export const openModal = () => ({
-  type: 'OPEN_MODAL'
+export const openSendModal = () => ({
+  type: 'OPEN_SEND_MODAL'
 });
 
-export const onSwipe = () => ({
-  type: 'ON_SWIPE'
+export const openGetModal = () => ({
+  type: 'OPEN_GET_MODAL'
 });
 
+export const onSendModalSwipe = () => ({
+  type: 'ON_SEND_MODAL_SWIPE'
+});
+
+export const onGetModalSwipe = () => ({
+  type: 'ON_GET_MODAL_SWIPE'
+});

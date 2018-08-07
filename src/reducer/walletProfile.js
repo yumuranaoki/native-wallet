@@ -3,7 +3,8 @@ const initialState = {
   balance: '...',
   toAddress: '',
   value: '0',
-  isModalVisible: false,
+  isSendModalVisible: false,
+  isGetModalVisible: false,
 };
 
 const walletProfileReducer = (state = initialState, action) => {
@@ -19,10 +20,14 @@ const walletProfileReducer = (state = initialState, action) => {
     case 'FINISHED_SEND_ETHER':
       console.log(action.result);
       return state;
-    case 'OPEN_MODAL':
-      return { ...state, isModalVisible: true };
-    case 'ON_SWIPE':
-      return { ...state, isModalVisible: false };
+    case 'OPEN_SEND_MODAL':
+      return { ...state, isSendModalVisible: true };
+    case 'OPEN_GET_MODAL':
+      return { ...state, isGetModalVisible: true };
+    case 'ON_SEND_MODAL_SWIPE':
+      return { ...state, isSendModalVisible: false };
+    case 'ON_GET_MODAL_SWIPE':
+      return { ...state, isGetModalVisible: false };
     default:
       return state;
   }

@@ -6,8 +6,10 @@ import {
   setWallet,
   getBalance,
   sendEther,
-  openModal,
-  onSwipe,
+  openSendModal,
+  openGetModal,
+  onSendModalSwipe,
+  onGetModalSwipe,
 } from '../action/walletProfile';
 
 const mapStateToProps = state => ({
@@ -15,7 +17,8 @@ const mapStateToProps = state => ({
   balance: state.walletProfileReducer.balance,
   toAddress: state.walletProfileReducer.toAddress,
   value: state.walletProfileReducer.value,
-  isModalVisible: state.walletProfileReducer.isModalVisible,
+  isSendModalVisible: state.walletProfileReducer.isSendModalVisible,
+  isGetModalVisible: state.walletProfileReducer.isGetModalVisible,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -25,8 +28,10 @@ const mapDispatchToProps = dispatch => ({
   getBalance: wallet => dispatch(getBalance(wallet)),
   sendEther: (wallet, balance, toAddress, value) => 
     dispatch(sendEther(wallet, balance, toAddress, value)),
-  openModal: () => dispatch(openModal()),
-  onSwipe: () => dispatch(onSwipe()),
+  openSendModal: () => dispatch(openSendModal()),
+  openGetModal: () => dispatch(openGetModal()),
+  onSendModalSwipe: () => dispatch(onSendModalSwipe()),
+  onGetModalSwipe: () => dispatch(onGetModalSwipe()),
 });
 
 const WalletProfileConnected = connect(

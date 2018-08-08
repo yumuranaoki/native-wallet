@@ -32,20 +32,19 @@ const styles = StyleSheet.create({
 
 const ScanQrcode = ({ navigation }) => (
   <View style={styles.modalView}>
-    <Text>
-      Scan QR code
-    </Text>
     <View style={styles.button}>
       <QRCodeScanner
-        onRead={() => navigation.navigate('SendEther')}
+        onRead={e => navigation.navigate('SendEther', {
+          address: e
+        })}
         topContent={
           <Text>
-            Go to wikipedia.org/wiki/QR_code
+            send by scanning QR code
           </Text>
         }
         bottomContent={
           <TouchableOpacity>
-            <Text>OK. Got it!</Text>
+            <Text>send by address</Text>
           </TouchableOpacity>
         }
       />

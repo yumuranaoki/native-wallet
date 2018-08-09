@@ -32,34 +32,39 @@ const styles = StyleSheet.create({
 });
 
 const SendEther = ({
-    wallet,
-    balance,
-    toAddress,
-    value,
-    onChangeToAddress,
-    onChangeValue,
-    sendEther
-  }) => (
-  <View style={styles.modalView}>
-  <Text style={{ marginTop: 20 }}>here you can input address</Text>
-  <TextInput
-    style={styles.textInput}
-    value={toAddress}
-    onChangeText={text => onChangeToAddress(text)}
-  />
-  <TextInput
-    style={styles.textInput}
-    value={value}
-    onChangeText={text => onChangeValue(text)}
-  />
-  <TouchableOpacity onPress={() => sendEther(wallet, balance, toAddress, value)}>
-    <View style={styles.button}>
-      <Text style={styles.buttonText}>
-        Send Ether
-      </Text>
-    </View>
-  </TouchableOpacity>
-</View>
-);
+  navigation,
+  wallet,
+  balance,
+  toAddress,
+  value,
+  onChangeToAddress,
+  onChangeValue,
+  sendEther
+}) => {
+  const qrcodeAddress = navigation.getParam('address', '');
+  return (
+    <View style={styles.modalView}>
+    <Text style={{ marginTop: 20 }}>here you can input address</Text>
+    <TextInput
+      style={styles.textInput}
+      value={qrcodeAddress !== '' ? qrcodeAddress : toAddress}
+      onChangeText={text => onChangeToAddress(text)}
+      editable={qrcodeAddress === ''}
+    />
+    <TextInput
+      style={styles.textInput}
+      value={value}
+      onChangeText={text => onChangeValue(text)}
+    />
+    <TouchableOpacity onPress={() => sendEther(wallet, balance, toAddress, value)}>
+      <View style={styles.button}>
+        <Text style={styles.buttonText}>
+          Send Ether
+        </Text>
+      </View>
+    </TouchableOpacity>
+  </View>
+  );
+};
 
 export default SendEther;

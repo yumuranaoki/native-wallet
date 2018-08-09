@@ -34,8 +34,8 @@ const ScanQrcode = ({ navigation }) => (
   <View style={styles.modalView}>
     <View style={styles.button}>
       <QRCodeScanner
-        onRead={e => navigation.navigate('SendEther', {
-          address: e
+        onRead={address => navigation.navigate('SendEther', {
+          address
         })}
         topContent={
           <Text>

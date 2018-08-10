@@ -1,3 +1,6 @@
+import '../../shim';
+import { keccak256 } from 'js-sha3';
+
 export const onChangeToAddress = toAddress => ({
   type: 'ON_CHANGE_TO_ADDRESS',
   toAddress,
@@ -6,6 +9,11 @@ export const onChangeToAddress = toAddress => ({
 export const onChangeValue = value => ({
   type: 'ON_CHANGE_VALUE',
   value,
+});
+
+export const onChangeERC20Address = ERC20Address => ({
+  type: 'ON_CHANGE_ERC20_ADDRESS',
+  ERC20Address,
 });
 
 export const setWallet = wallet => ({
@@ -70,3 +78,32 @@ export const onSendModalSwipe = () => ({
 export const onGetModalSwipe = () => ({
   type: 'ON_GET_MODAL_SWIPE'
 });
+
+export const getERC20Info = (wallet, ERC20Address) => (
+  function (dispatch) {
+    if (wallet && wallet.address !== '') {
+      const method = keccak256('balance');
+      const address = `000000000000000000000000${wallet.address.slice(2)}`;
+      const data = `0x${method + address}`;
+      const txParams = {
+        to: ERC20Address,
+        data
+      };
+      wallet.call(txParams)
+      .then(res => {
+        if (res == '0x') {
+          return 0;
+        } 
+        return parseInt(res, 16);
+      })
+      .then(res => dispatch(finishedGetERC20Info(res)))
+      .catch(err => console.log(err));
+    }
+  }
+);
+
+const finishedGetERC20Info = ERC20Balance => ({
+  type: 'FINISHED_GET_ERC20_INFO',
+  ERC20Balance,
+});
+

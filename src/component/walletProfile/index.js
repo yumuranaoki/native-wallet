@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import {
   View, 
   StyleSheet,
-  ScrollView,
 } from 'react-native';
 import SInfo from 'react-native-sensitive-info';
 import Wallet from '../../util/wallet';
@@ -11,12 +10,12 @@ import Header from '../common/header';
 import Card from './card';
 import SendModal from './sendModal';
 import GetModal from './getModal';
+import ERC20Card from './erc20Card';
 
 class WalletProfile extends Component {
   async componentDidMount() {    
     // addressがないuserには、walletを作成
-    // addressがあるuserにはaddressを引っ張ってくる
-    
+    // addressがあるuserにはaddressを引っ張ってくる 
     let wallet;
     try {
       const walletInfo = await SInfo.getItem('walletInfo', {
@@ -64,6 +63,7 @@ class WalletProfile extends Component {
     // walletがあればここでbalanceを取得
     if (wallet) {
       this.props.getBalance(wallet);
+      console.log(wallet.address)
     }
   }
 
@@ -76,7 +76,7 @@ class WalletProfile extends Component {
           <Card {...this.props} name='Ether' />
         </View>
         <View style={styles.cardConteiner}>
-          <Card {...this.props} name='Other ERC20' />
+          <ERC20Card {...this.props} name='Other ERC20' />
         </View>        
          
         <SendModal {...this.props} />

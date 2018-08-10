@@ -1,7 +1,9 @@
 const initialState = {
   wallet: null,
   balance: '...',
+  ERC20Balance: '...',
   toAddress: '',
+  ERC20Address: '',
   value: '0',
   isSendModalVisible: false,
   isGetModalVisible: false,
@@ -13,6 +15,8 @@ const walletProfileReducer = (state = initialState, action) => {
       return { ...state, toAddress: action.toAddress };
     case 'ON_CHANGE_VALUE':
       return { ...state, value: action.value };
+    case 'ON_CHANGE_ERC20_ADDRESS':
+      return { ...state, ERC20Address: action.ERC20Address };
     case 'SET_WALLET':
       return { ...state, wallet: action.wallet };
     case 'FINISHED_GET_BALANCE':
@@ -20,6 +24,9 @@ const walletProfileReducer = (state = initialState, action) => {
     case 'FINISHED_SEND_ETHER':
       console.log(action.result);
       return state;
+    case 'FINISHED_GET_ERC20_INFO':
+      console.log(action.ERC20Balance);
+      return { ...state, ERC20Balance: action.ERC20Balance };
     case 'OPEN_SEND_MODAL':
       return { ...state, isSendModalVisible: true };
     case 'OPEN_GET_MODAL':

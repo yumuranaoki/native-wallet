@@ -175,31 +175,31 @@ async signTransaction(txParams) {
 
     call(txParams) {
         const ethCall = {
-                jsonrpc: '2.0',
-                method: 'eth_call',
-                params:	[
-                    {
-                        to: txParams.to,
-                        data: txParams.data,
-                    },
-                     'latest'
-                ],
-                id: 1
-            };
-            return new Promise(resolve => {
-                fetch('https://mainnet.infura.io/Y80MvxYEzKUddrYMy9Xj', {
-                    method: 'POST',
-                    body: JSON.stringify(ethCall),
-                    headers: new Headers({
-                        'Content-Type': 'application/json'
-                    })
+            jsonrpc: '2.0',
+            method: 'eth_call',
+            params:	[
+                {
+                    to: txParams.to,
+                    data: txParams.data,
+                },
+                    'latest'
+            ],
+            id: 42
+        };
+        return new Promise(resolve => {
+            fetch('https://kovan.infura.io/Y80MvxYEzKUddrYMy9Xj', {
+                method: 'POST',
+                body: JSON.stringify(ethCall),
+                headers: new Headers({
+                    'Content-Type': 'application/json'
                 })
-                .then(res => res.json())
-                .then(res => res.result)
-                .then(res => resolve(res))
-                .catch(err => console.log(err));
-            });
-      }
+            })
+            .then(res => res.json())
+            .then(res => res.result)
+            .then(res => resolve(res))
+            .catch(err => console.log(err));
+        });
+    }
 }
 
 export default Wallet;

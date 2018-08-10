@@ -5,7 +5,7 @@ const Header = () => (
   <View style={styles.rowAlign}>
     <View style={styles.header}>
       <Text style={styles.text}>
-        Hello from Plasma Wallet
+        P Wallet
       </Text>
     </View>
   </View>

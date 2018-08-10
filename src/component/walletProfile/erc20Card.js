@@ -5,14 +5,42 @@ import {
   StyleSheet,
   TouchableOpacity,
   Dimensions,
+  TextInput,
  } from 'react-native';
 
-const Card = ({ balance, openSendModal, openGetModal, name }) => (
+const ERC20Card = ({
+  wallet,
+  ERC20Balance,
+  name,
+  ERC20Address,
+  openSendModal,
+  openGetModal,
+  onChangeERC20Address,
+  getERC20Info,
+}) => (
   <View style={styles.etherCard}>
     <View style={{ flexDirection: 'column' }}>
       <Text style={styles.name}>{name}</Text>
+
+      <View style={styles.flexInput}>
+        <TextInput
+          style={styles.textInput}
+          value={ERC20Address}
+          onChangeText={text => onChangeERC20Address(text)}
+        />
+      </View>
+      <View style={styles.flexButton}>
+        <TouchableOpacity onPress={() => getERC20Info(wallet, ERC20Address)}>
+            <View style={styles.enterButton}>
+              <Text style={styles.enterButtonText}>
+                Enter
+              </Text>
+            </View>
+        </TouchableOpacity>
+      </View>
+
       <Text style={styles.balance}>
-        {balance}ETH
+        {ERC20Balance}ETH
       </Text>
       <View style={styles.rowAlign}>
         <TouchableOpacity onPress={() => openSendModal()}>
@@ -62,6 +90,22 @@ const styles = StyleSheet.create({
     paddingLeft: 3,
     paddingRight: 3,
   },
+  textInput: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+    width: screenWidth - 50,
+    height: 30,
+  },
+  flexInput: {
+    marginTop: 10,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  flexButton: {
+    marginTop: 10,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
   name: {
     fontSize: 24,
     paddingTop: 5,
@@ -91,11 +135,24 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginRight: 15,
   },
+  enterButton: {
+    width: 80,
+    height: 30,
+    borderRadius: 12,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 15,
+  },
   buttonText: {
     color: 'white',
     fontSize: 18,
     fontWeight: 'bold',
   },
+  enterButtonText: {
+    fontSize: 15,
+  }
 });
 
-export default Card;
+export default ERC20Card;

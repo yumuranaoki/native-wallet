@@ -1,72 +1,16 @@
 import '../../../shim';
 import React, { Component } from 'react';
 import {
-  View,
-  Text,
+  View, 
   StyleSheet,
-  TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import SInfo from 'react-native-sensitive-info';
 import Wallet from '../../util/wallet';
+import Header from '../common/header';
+import Card from './card';
 import SendModal from './sendModal';
 import GetModal from './getModal';
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    paddingTop: 30,
-  },
-  textInput: {
-    borderBottomColor: 'black',
-    borderBottomWidth: 1,
-    width: 200,
-    marginBottom: 30,
-    marginTop: 10,
-  },
-  modalView: {
-    backgroundColor: 'white',
-    borderRadius: 10,
-    flex: 1,
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  buttonsAlign: {
-    flex: 1,
-    flexDirection: 'row',
-  },
-  getButton: {
-    width: 110,
-    height: 50,
-    borderRadius: 12,
-    backgroundColor: '#ff9966',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginLeft: 15,
-  },
-  sendButton: {
-    width: 110,
-    height: 50,
-    borderRadius: 12,
-    backgroundColor: '#00ff99',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 15,
-  },
-  button: {
-    width: 120,
-    height: 50,
-    borderRadius: 12,
-    backgroundColor: '#00ff99',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-});
 
 class WalletProfile extends Component {
   async componentDidMount() {    
@@ -124,43 +68,33 @@ class WalletProfile extends Component {
   }
 
   render() {
-    const { 
-      wallet,
-      balance,
-      openSendModal,
-      openGetModal,
-    } = this.props;
-
-    return ( 
+    return (
       <View style={styles.container}>
-        <Text style={{ fontSize: 18, marginBottom: 15 }}>
-          Hello from Plasma Wallet
-        </Text>
-        <Text>{wallet ? wallet.address : ''}</Text>
-        <Text style={{ fontSize: 18, marginTop: 15, marginBottom: 15 }}>
-          Your Balance: {balance}ETH
-        </Text>
-        <View style={styles.buttonsAlign}>
-          <TouchableOpacity onPress={() => openSendModal()}>
-            <View style={styles.sendButton}>
-              <Text style={styles.buttonText}>
-                Send Ether
-              </Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => openGetModal()}>
-            <View style={styles.getButton}>
-              <Text style={styles.buttonText}>
-                Get Ether
-              </Text>
-            </View>
-          </TouchableOpacity>
+        <Header />
+        
+        <View style={styles.cardConteiner}>
+          <Card {...this.props} name='Ether' />
         </View>
+        <View style={styles.cardConteiner}>
+          <Card {...this.props} name='Other ERC20' />
+        </View>        
+         
         <SendModal {...this.props} />
         <GetModal {...this.props} />
       </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    paddingTop: 30,
+  },
+  cardConteiner: {
+    flexDirection: 'row',
+  },
+});
 
 export default WalletProfile;

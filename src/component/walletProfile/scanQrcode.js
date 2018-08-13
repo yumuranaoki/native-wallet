@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  Button,
 } from 'react-native';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 
@@ -34,8 +35,8 @@ const ScanQrcode = ({ navigation }) => (
   <View style={styles.modalView}>
     <View style={styles.button}>
       <QRCodeScanner
-        onRead={address => navigation.navigate('SendEther', {
-          address
+        onRead={e => navigation.navigate('SendEther', {
+          address: e.data
         })}
         topContent={
           <Text>
@@ -52,4 +53,29 @@ const ScanQrcode = ({ navigation }) => (
   </View>
 );
 
-export default ScanQrcode;
+/*
+const TestScanQrcode = ({ balance }) => 
+  (
+  <View>
+    <Button
+      title='balance'
+      onPress={() => console.log(balance)}
+    />
+  </View>
+);
+*/
+
+class TestScanQrcode extends React.Component {
+  render() {
+    return (
+      <View>
+    <Button
+      title='balance'
+      onPress={() => console.log(this.props)}
+    />
+  </View>
+    );
+  }
+}
+
+export default TestScanQrcode;

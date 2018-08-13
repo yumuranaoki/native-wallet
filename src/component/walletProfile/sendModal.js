@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Button } from 'react-native';
 import Modal from 'react-native-modal';
 import { createStackNavigator } from 'react-navigation';
-import ScanQrcode from './scanQrcode';
+import TestScanQrcode from './scanQrcode';
 import SendEther from './sendEther';
 
 const styles = StyleSheet.create({
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
 });
 
 const SendModalStackNavigator = createStackNavigator({
-  ScanQrcode,
+  TestScanQrcode,
   SendEther,
 });
 
@@ -57,7 +57,11 @@ const SendModal = ({
       swipeDirection="down"
       style={styles.modal}
     >
-      <SendModalStackNavigator />
+      <Button
+        title='button'
+        onPress={() => console.log(balance)}
+      />
+      <SendModalStackNavigator screenProps={{ balance }} />
     </Modal>
 );
 

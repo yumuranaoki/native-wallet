@@ -49,7 +49,7 @@ const SendEther = ({
       style={styles.textInput}
       value={qrcodeAddress !== '' ? qrcodeAddress : toAddress}
       onChangeText={text => onChangeToAddress(text)}
-      editable={qrcodeAddress === ''}
+      // editable={qrcodeAddress === ''}
     />
     <TextInput
       style={styles.textInput}

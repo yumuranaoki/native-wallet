@@ -54,28 +54,34 @@ const ScanQrcode = ({ navigation }) => (
 );
 
 /*
-const TestScanQrcode = ({ balance }) => 
-  (
-  <View>
-    <Button
-      title='balance'
-      onPress={() => console.log(balance)}
-    />
-  </View>
-);
+ * test用
+ */
+
+ /*
+const TestScanQrcode = props => {
+  const { 
+    wallet,
+    balance,
+    toAddress,
+    value,
+    isSendModalVisible,
+    onSendModalSwipe,
+    onChangeToAddress,
+    onChangeValue,
+    sendEther
+  } = props.screenProps.props;
+  const { navigation } = props;
+  return (
+    <View>
+      <Button
+        title='navigate'
+        onPress={() => navigation.navigate('SendEther', {
+          address: 'hogehoge'
+        })}
+      />
+    </View>
+  );
+};
 */
 
-class TestScanQrcode extends React.Component {
-  render() {
-    return (
-      <View>
-    <Button
-      title='balance'
-      onPress={() => console.log(this.props)}
-    />
-  </View>
-    );
-  }
-}
-
-export default TestScanQrcode;
+export default ScanQrcode;

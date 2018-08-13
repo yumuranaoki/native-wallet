@@ -63,7 +63,7 @@ class WalletProfile extends Component {
     // walletがあればここでbalanceを取得
     if (wallet) {
       this.props.getBalance(wallet);
-      console.log(wallet.address)
+      console.log(wallet.address);
     }
   }
 

@@ -2,7 +2,7 @@ const initialState = {
   wallet: null,
   balance: '...',
   ERC20Balance: '...',
-  toAddress: '',
+  toAddress: null,
   ERC20Address: '',
   value: '0',
   isSendModalVisible: false,

@@ -4,7 +4,6 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  Button,
 } from 'react-native';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 
@@ -36,7 +35,7 @@ const ScanQrcode = ({ navigation }) => (
     <View style={styles.button}>
       <QRCodeScanner
         onRead={e => navigation.navigate('SendEther', {
-          address: e.data
+          address: e.data.slice(9, 51)
         })}
         topContent={
           <Text>

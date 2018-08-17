@@ -33,7 +33,7 @@ const GetModal = ({
           here you can get ether
         </Text>
         <QRCode
-          value={wallet == null ? '' : wallet.address}
+          value={wallet == null ? '' : `ethereum:${wallet.address}`}
           size={200}
           bgColor='#ff9966'
           fgColor='white'

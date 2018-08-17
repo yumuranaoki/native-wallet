@@ -3,6 +3,6 @@
   "parser": "babel-eslint",
   "globals": { 
     "fetch": false,
-    "Headers": false,
+    "Headers": false
   }
 }

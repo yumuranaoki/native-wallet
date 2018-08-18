@@ -1,23 +1,8 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import OAuthManager from 'react-native-oauth';
+import SInfo from 'react-native-sensitive-info';
 import { CLIENT_ID, CLIENT_SECRET } from 'react-native-dotenv';
-
-const config = {
-  facebook: {
-    client_id: CLIENT_ID,
-    client_secret: CLIENT_SECRET,
-  }
-};
-
-const manager = new OAuthManager('pwallet');
-manager.configure(config);
-
-const authorize = () => {
-  manager.authorize('facebook')
-  .then(res => console.log(res))
-  .catch(err => console.log(err));
-};
 
 const styles = StyleSheet.create({
   container: {
@@ -40,21 +25,46 @@ const styles = StyleSheet.create({
   },
 });
 
-const SignUp = () => (
-  <View style={styles.container}>
-  <View>
-    <Text>
-      Sign Up
-    </Text>
-    <TouchableOpacity onPress={() => authorize()}>
-      <View style={styles.button}>
-        <Text style={styles.buttonText}>
-          sign up with facebook
+const SignUp = ({ navigation }) => {
+  const config = {
+    facebook: {
+      client_id: CLIENT_ID,
+      client_secret: CLIENT_SECRET,
+    }
+  };
+  const manager = new OAuthManager('pwallet');
+  manager.configure(config);
+
+  const authorize = async () => {
+    try {
+      const result = await manager.authorize('facebook');
+      if (result.status === 'ok') {
+        const accessToken = result.response.credentials.accessToken;
+        SInfo.setItem('facebookAccessToken', accessToken, {});
+        navigation.navigate('NewUser');
+      }
+      console.log(result);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <View>
+        <Text>
+          Sign Up
         </Text>
+        <TouchableOpacity onPress={() => authorize()}>
+          <View style={styles.button}>
+            <Text style={styles.buttonText}>
+              sign up with facebook
+            </Text>
+          </View>
+        </TouchableOpacity>
       </View>
-    </TouchableOpacity>
-  </View>
-  </View>
-);
+    </View>
+  );
+};
 
 export default SignUp;

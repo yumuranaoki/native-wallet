@@ -1,11 +1,11 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import WalletProfileConnected from './container/walletProfile';
+import EntrySwitchNavigaotr from './navigator/entrySwitchNavigator';
 import store from './store/index';
 
 const App = () => (
   <Provider store={store}>
-    <WalletProfileConnected />
+    <EntrySwitchNavigaotr />
   </Provider>
 );
 

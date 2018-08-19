@@ -35,15 +35,41 @@ const SignUp = ({ navigation }) => {
   const manager = new OAuthManager('pwallet');
   manager.configure(config);
 
+  // navigation.navigateはserverへのpostが成功したら
+  // oauthでaccountNameとemailも取りたい
   const authorize = async () => {
     try {
       const result = await manager.authorize('facebook');
+      console.log(result);
       if (result.status === 'ok') {
         const accessToken = result.response.credentials.accessToken;
-        SInfo.setItem('facebookAccessToken', accessToken, {});
-        navigation.navigate('NewUser');
+        await SInfo.setItem('facebookAccessToken', accessToken, {});
+        try {
+          const data = {
+            accessToken,
+            accountName: 'naoki',
+            email: 'naoki@example.com'
+          }; 
+          const fetchResult = await fetch('http://localhost:3000/users', {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: new Headers({
+              'Content-Type': 'application/json'
+            })
+          });
+          const jsonResult = await fetchResult.json();
+          console.log(jsonResult);
+          if (jsonResult.message) {
+            // error messageをalertかなにかで表示
+            console.log(jsonResult.message);
+          } else {
+            navigation.navigate('NewUser');
+          }
+        } catch (err) {
+          // error messageをalertかなにかで表示
+          console.log(err);
+        }
       }
-      console.log(result);
     } catch (err) {
       console.log(err);
     }

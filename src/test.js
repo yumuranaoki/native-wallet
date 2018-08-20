@@ -1,60 +1,71 @@
-import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import OAuthManager from 'react-native-oauth';
+import { CLIENT_ID, CLIENT_SECRET } from 'react-native-dotenv';
+import SInfo from 'react-native-sensitive-info';
 
-class Test extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      err: false
-    };
-  }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  button: {
+    width: 120,
+    height: 50,
+    borderRadius: 12,
+    backgroundColor: '#305097',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+});
 
-  async componentDidMount() {
-    const accessToken = 'hogehoge1';
+const SignUp = () => {
+  const config = {
+    facebook: {
+      client_id: CLIENT_ID,
+      client_secret: CLIENT_SECRET,
+    }
+  };
+  const manager = new OAuthManager('pwallet');
+  manager.configure(config);
+
+  // navigation.navigateはserverへのpostが成功したら
+  // oauthでaccountNameとemailも取りたい
+  const authorize = async () => {
     try {
-      const data = {
-        accessToken,
-        accountName: 'naoki1',
-        email: 'naoki1@example.com'
-      }; 
-      const fetchResult = await fetch('http://localhost:3000/users', {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: new Headers({
-          'Content-Type': 'application/json'
-        })
-      });
-      const result = await fetchResult.json();
+      const result = await manager.authorize('facebook', { scopes: 'email' });
       console.log(result);
-      console.log(result.message);
-      if (result.message) {
-        console.log(result.message);
-        this.setState({ err: true });
+      if (result.status === 'ok') {
+        const accessToken = result.response.credentials.accessToken;
+        await SInfo.setItem('facebookAccessToken', accessToken, {});
       }
     } catch (err) {
       console.log(err);
-      this.setState({ err: true });
     }
-  }
+  };
 
-  render() {
-    const App = () => (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+  return (
+    <View style={styles.container}>
+      <View>
         <Text>
-          App
+          Sign Up
         </Text>
+        <TouchableOpacity onPress={() => authorize()}>
+          <View style={styles.button}>
+            <Text style={styles.buttonText}>
+              sign up with facebook
+            </Text>
+          </View>
+        </TouchableOpacity>
       </View>
-    );
+    </View>
+  );
+};
 
-    const Err = () => (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>
-          Err
-        </Text>
-      </View>
-    );
-    return this.state.err ? <Err /> : <App />;
-  }
-}
-
-export default Test;
+export default SignUp;

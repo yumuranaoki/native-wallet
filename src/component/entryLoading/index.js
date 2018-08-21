@@ -6,15 +6,19 @@ import {
 } from 'react-native';
 import SInfo from 'react-native-sensitive-info';
 
-class Entry extends Component {
+class EntryLoading extends Component {
   componentDidMount() {
     this.checkUser();
   }
 
   checkUser = async () => {
-    const facebookAcessToken = await SInfo.getItem('facebookAccessToken', {});
+    const acessToken = await SInfo.getItem('accessToken', {
+      sharedPreferencesName: 'pWalletSharedPreference',
+      keychainService: 'pWalletKeyChain',
+    });
+    
     this.props.navigation.navigate(
-      facebookAcessToken ? 'WalletProfileConnected' : 'NewUserNavigator'
+      acessToken ? 'WalletProfileConnected' : 'NewUserNavigator'
     );
   }
 
@@ -40,4 +44,4 @@ class Entry extends Component {
   }
 }
 
-export default Entry;
+export default EntryLoading;

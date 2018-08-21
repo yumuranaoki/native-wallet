@@ -56,7 +56,7 @@ class Wallet {
   }
 
   async generateAddress() {
-    if (this.publicKey) {
+    if (this.bytePublicKey) {
         const address = keccak256(this.bytePublicKey.slice(1)).slice(24);
         const keccak256Address = keccak256(address);
         let checkSumAddress = '';
@@ -71,6 +71,18 @@ class Wallet {
         console.log(this.address);
         return this.address;
     }
+  }
+
+  async generateAccessToken() {
+    if (this.mnemonicWord || this.bytePrivateKey) {
+        if (!this.bytePrivateKey) {
+            const [bytePrivateKey, chainCode] = fromSeed(this.mnemonicWord, '');
+            this.bytePrivateKey = bytePrivateKey;
+        }
+        const accessToken = keccak256(this.bytePrivateKey.slice(1)).slice(24);
+        return accessToken;
+    }
+    throw new Error('there is neither mnemonic word nor private key');
   }
 
   async getNonce() {

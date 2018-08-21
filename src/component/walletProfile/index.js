@@ -52,8 +52,8 @@ class WalletProfile extends Component {
         };
         // ここのpromiseでなにかしらの処理をしてもいい
         SInfo.setItem('walletInfo', JSON.stringify(newWalletInfo), {
-          sharedPreferencesName: 'plasmaWalletSharedPreference',
-          keychainService: 'plasmaWalletKeyChain'
+          sharedPreferencesName: 'pWalletSharedPreference',
+          keychainService: 'pWalletKeyChain'
         });
       }
     } catch (error) {

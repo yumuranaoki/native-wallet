@@ -46,30 +46,30 @@ const SendEther = props => {
   const trueToAddress = toAddress || qrcodeAddress;
   return (
     <View style={styles.modalView}>
-    <Text style={{ marginTop: 20 }}>here you can input address</Text>
-    <TextInput
-      style={styles.textInput}
-      value={toAddress}
-      onChangeText={text => onChangeToAddress(text)}
-      defaultValue={qrcodeAddress}      
-    />
-    <Button
-      title='check'
-      onPress={() => console.log(trueToAddress)}
-    />
-    <TextInput
-      style={styles.textInput}
-      value={value}
-      onChangeText={text => onChangeValue(text)}
-    />
-    <TouchableOpacity onPress={() => sendEther(wallet, balance, trueToAddress, value)}>
-      <View style={styles.button}>
-        <Text style={styles.buttonText}>
-          Send Ether
-        </Text>
-      </View>
-    </TouchableOpacity>
-  </View>
+      <Text style={{ marginTop: 20 }}>here you can input address</Text>
+      <TextInput
+        style={styles.textInput}
+        value={toAddress}
+        onChangeText={text => onChangeToAddress(text)}
+        defaultValue={qrcodeAddress}      
+      />
+      <Button
+        title='check'
+        onPress={() => console.log(trueToAddress)}
+      />
+      <TextInput
+        style={styles.textInput}
+        value={value}
+        onChangeText={text => onChangeValue(text)}
+      />
+      <TouchableOpacity onPress={() => sendEther(wallet, balance, trueToAddress, value)}>
+        <View style={styles.button}>
+          <Text style={styles.buttonText}>
+            Send Ether
+          </Text>
+        </View>
+      </TouchableOpacity>
+    </View>
   );
 };
 

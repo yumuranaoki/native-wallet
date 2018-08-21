@@ -52,35 +52,4 @@ const ScanQrcode = ({ navigation }) => (
   </View>
 );
 
-/*
- * test用
- */
-
- /*
-const TestScanQrcode = props => {
-  const { 
-    wallet,
-    balance,
-    toAddress,
-    value,
-    isSendModalVisible,
-    onSendModalSwipe,
-    onChangeToAddress,
-    onChangeValue,
-    sendEther
-  } = props.screenProps.props;
-  const { navigation } = props;
-  return (
-    <View>
-      <Button
-        title='navigate'
-        onPress={() => navigation.navigate('SendEther', {
-          address: 'hogehoge'
-        })}
-      />
-    </View>
-  );
-};
-*/
-
 export default ScanQrcode;

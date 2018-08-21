@@ -6,7 +6,7 @@ import SignUp from '../component/signUp/index';
 const NewUserNavigator = createStackNavigator({
   NewUser,
   SignIn,
-  SignUp
+  SignUp,
 }, {
   initialRouteName: 'NewUser'
 });

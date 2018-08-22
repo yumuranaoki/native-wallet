@@ -18,7 +18,7 @@ class EntryLoading extends Component {
     });
     
     this.props.navigation.navigate(
-      acessToken ? 'WalletProfileConnected' : 'NewUserNavigator'
+      acessToken ? 'SignedUserNavigator' : 'NewUserNavigator'
     );
   }
 

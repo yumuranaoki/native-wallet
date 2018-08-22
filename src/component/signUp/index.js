@@ -5,6 +5,8 @@ class SignUp extends Component {
   state = {
     accountName: '',
     accountId: '',
+    password: '',
+    passwordHidden: true,
   };
 
   setUpProfile = async () => {
@@ -13,6 +15,7 @@ class SignUp extends Component {
       accessToken,
       accountName: this.state.accountName,
       accountId: this.state.accountId,
+      password: this.state.password,
     };
     const result = await fetch('http://localhost:3000/users', {
       method: 'POST',
@@ -70,11 +73,20 @@ class SignUp extends Component {
           style={styles.textInput}
           value={this.state.accountName}
           onChangeText={text => this.setState({ accountName: text })}
+          placeholder='account name'
         />
         <TextInput
           style={styles.textInput}
           value={this.state.accountId}
           onChangeText={text => this.setState({ accountId: text })}
+          placeholder='account id'
+        />
+        <TextInput
+          style={styles.textInput}
+          value={this.state.password}
+          onChangeText={text => this.setState({ password: text })}
+          secureTextEntry={this.state.passwordHidden}
+          placeholder='password'
         />
         <TouchableOpacity onPress={() => this.setUpProfile()}>
           <View style={styles.button}>

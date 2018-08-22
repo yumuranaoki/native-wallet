@@ -1,12 +1,12 @@
 import { createSwitchNavigator, } from 'react-navigation';
-import NewUserNavigator from '../navigator/newUserNavigator';
 import EntryLoading from '../component/entryLoading/index';
-import WalletProfileConnected from '../container/walletProfile';
+import NewUserNavigator from '../navigator/newUserNavigator';
+import SignedUserNavigator from '../navigator/signedUserNavigator';
 
 const EntrySwitchNavigator = createSwitchNavigator({
   EntryLoading, 
   NewUserNavigator,
-  WalletProfileConnected,
+  SignedUserNavigator,
 }, {
   initialRouteName: 'EntryLoading'
 });

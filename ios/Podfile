@@ -7,6 +7,8 @@ target 'NativeWallet' do
 
   # Pods for NativeWallet
 
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
   target 'NativeWalletTests' do
     inherit! :search_paths
     # Pods for testing

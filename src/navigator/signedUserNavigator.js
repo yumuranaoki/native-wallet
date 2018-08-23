@@ -1,7 +1,7 @@
 import { createTabNavigator, createDrawerNavigator } from 'react-navigation';
 import { Dimensions } from 'react-native';
 import Chat from '../component/chat/index';
-import FriendDrawer from '../component/friendDrawer/index';
+import FriendDrawerConnected from '../container/friendDrawer';
 import WalletProfileConnected from '../container/walletProfile';
 import Profile from '../component/profile/index';
 
@@ -13,7 +13,7 @@ const SignedUserNavigator = createTabNavigator({
     screen: createDrawerNavigator({
       Chat,
     }, {
-      contentComponent: FriendDrawer,
+      contentComponent: FriendDrawerConnected,
       drawerWidth: 300,
     })
   },

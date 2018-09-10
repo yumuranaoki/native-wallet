@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  TextInput,
+  AsyncStorage,
+} from 'react-native';
 
 class SignUp extends Component {
   state = {
@@ -11,8 +18,10 @@ class SignUp extends Component {
 
   setUpProfile = async () => {
     const accessToken = this.props.navigation.getParam('accessToken');
+    const address = this.props.navigation.getParam('address');
     const data = {
       accessToken,
+      address,
       accountName: this.state.accountName,
       accountId: this.state.accountId,
       password: this.state.password,
@@ -29,10 +38,15 @@ class SignUp extends Component {
       // alertでerrorを表示
       console.log(jsonResult.message);
     } else {
+      const userId = jsonResult.user_id.toString();
       // async storageでaccountIdとaccountNameをstore
-      this.navigation.navigate('EntryLoading');
+      try {
+        AsyncStorage.setItem('userId', userId);
+      } catch (err) {
+        console.log(err);
+      }
+      this.props.navigation.navigate('EntryLoading');
     }
-    console.log(result);
   };
 
   render() {

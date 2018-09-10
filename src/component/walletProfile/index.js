@@ -13,7 +13,7 @@ import GetModal from './getModal';
 import ERC20Card from './erc20Card';
 
 class WalletProfile extends Component {
-  async componentDidMount() {    
+  async componentDidMount() {
     // addressがないuserには、walletを作成
     // addressがあるuserにはaddressを引っ張ってくる 
     let wallet;

@@ -4,9 +4,12 @@ import {
   Text,
   StyleSheet,
   TextInput,
-  ScrollView,
   FlatList,
+  Modal,
+  TouchableOpacity,
+  Button,
 } from 'react-native';
+import FriendCard from './friendCard';
 
 class FreindDrawer extends Component {
   async componentDidMount() {
@@ -18,9 +21,13 @@ class FreindDrawer extends Component {
 
   render() {
     const {
-      accountId, searchedUser, followeds, onChangeAccountIdText, onSubmitAccountId
+      navigation,
+      accountId,
+      followeds,
+      onChangeAccountIdText,
+      onSubmitAccountId,
+      changeModalState,
     } = this.props;
-    const searchedUserWrapper = searchedUser ? searchedUser.account_name : '';
     const followedsArray = [];
     if (followeds && followeds.followeds_list) {
       followeds.followeds_list.forEach(followed => {
@@ -62,12 +69,17 @@ class FreindDrawer extends Component {
             onSubmitEditing={() => onSubmitAccountId(accountId)}
           />
         </View>
-        <Text>
-          {searchedUserWrapper}
-        </Text>
         <FlatList
           data={followedsArray}
-          renderItem={({ item }) => <Text key>{item.account_name}</Text>}
+          renderItem={({ item }) => 
+            <FriendCard
+              id={item.id}
+              accountId={item.account_id}
+              accountName={item.account_name}
+              navigation={navigation}
+              following={true}
+            />
+          }
           keyExtractor={(item, index) => index.toString()}
         />
       </View>

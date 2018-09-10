@@ -1,6 +1,13 @@
 import { connect } from 'react-redux';
 import FriendDrawer from '../component/friendDrawer/index';
-import { onChangeAccountIdText, onSubmitAccountId, getFolloweds } from '../action/friendDrawer';
+import {
+  onChangeAccountIdText,
+  getFolloweds,
+} from '../action/friendDrawer';
+import {
+  changeModalState,
+  onSubmitAccountId,
+} from '../action/recentChat';
 
 const mapStateToProps = state => ({
   accountId: state.friendDrawerReducer.accountId,
@@ -12,6 +19,7 @@ const mapDispatchToProps = dispatch => ({
   onChangeAccountIdText: text => dispatch(onChangeAccountIdText(text)),
   onSubmitAccountId: text => dispatch(onSubmitAccountId(text)),
   getFolloweds: userId => dispatch(getFolloweds(userId)),
+  changeModalState: () => dispatch(changeModalState()),
 });
 
 const FriendDrawerConnected = connect(

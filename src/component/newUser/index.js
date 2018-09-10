@@ -39,7 +39,7 @@ const NewUser = ({ navigation }) => {
         sharedPreferencesName: 'pWalletSharedPreference',
         keychainService: 'pWalletKeyChain',
       });
-      navigation.navigate('SignUp', { accessToken });
+      navigation.navigate('SignUp', { accessToken, address: wallet.address });
     } catch (err) {
       console.log(err);
     }

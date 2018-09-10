@@ -1,20 +1,15 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { createStackNavigator } from 'react-navigation';
+import RecentChatConnected from '../../container/recentChat';
+import Chat from './chat';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+const ChatStck = createStackNavigator({
+  RecentChatConnected,
+  Chat: {
+    screen: Chat,
+    navigationOptions: ({ navigation }) => ({
+      title: navigation.state.params.accountName,
+    }),
   }
 });
 
-const Chat = () => (
-  <View style={styles.container}>
-    <Text>
-      this is a chat screen
-    </Text>
-  </View>
-);
-
-export default Chat;
+export default ChatStck;

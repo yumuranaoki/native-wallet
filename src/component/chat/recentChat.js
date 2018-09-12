@@ -8,6 +8,10 @@ import {
   TouchableOpacity,
   Button,
 } from 'react-native';
+import 'core-js/es6/map';
+import 'core-js/es6/symbol';
+import 'core-js/fn/symbol/iterator';
+import 'babel-polyfill';
 
 const { height, width } = Dimensions.get('window');
 
@@ -54,6 +58,7 @@ class RecentChat extends Component {
         alignItems: 'center',
       },
     });
+    
     return (
       <View style={styles.container}>
         <Text>

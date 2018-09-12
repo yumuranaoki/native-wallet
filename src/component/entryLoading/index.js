@@ -20,6 +20,7 @@ class EntryLoading extends Component {
     this.props.navigation.navigate(
       acessToken ? 'SignedUserNavigator' : 'NewUserNavigator'
     );
+    
    // this.props.navigation.navigate('NewUserNavigator');
   }
 

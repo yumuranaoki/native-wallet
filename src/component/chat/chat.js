@@ -64,6 +64,7 @@ const styles = StyleSheet.create({
 });
 
 class Chat extends Component {
+  // walletはreduxで管理
   state = {
     userId: null,
     partnerId: null,
@@ -116,7 +117,13 @@ class Chat extends Component {
   }
 
   submitEther = content => {
-    
+    if (Number(content)) {
+      const value = Number(content);
+      const { wallet, balance } = this.props;
+      console.log(wallet);
+      console.log(balance);
+      this.props.sendEther(wallet, balance, this.state.address, value);
+    }
   }
 
   render() {
@@ -165,14 +172,14 @@ class Chat extends Component {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.sendButton}
-            onPress={() => this.submitContent(this.state.content)}
+            onPress={() => this.submitEther(this.state.content)}
           >
             <Text>E</Text>
           </TouchableOpacity>
         </View>
         <Button
           title='check'
-          onPress={() => console.log(this.state)}
+          onPress={() => console.log(this.props)}
         />
       </View>
     );

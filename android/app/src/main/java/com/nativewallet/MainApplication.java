@@ -5,7 +5,6 @@ import android.app.Application;
 import com.facebook.react.ReactApplication;
 import com.oblador.vectoricons.VectorIconsPackage;
 import org.reactnative.camera.RNCameraPackage;
-import io.fullstack.oauth.OAuthManagerPackage;
 import org.reactnative.camera.RNCameraPackage;
 import com.tradle.react.UdpSocketsModule;
 import com.peel.react.TcpSocketsModule;
@@ -33,8 +32,6 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
             new VectorIconsPackage(),
-            new RNCameraPackage(),
-            new OAuthManagerPackage(),
             new RNCameraPackage(),
             new UdpSocketsModule(),
             new TcpSocketsModule(),

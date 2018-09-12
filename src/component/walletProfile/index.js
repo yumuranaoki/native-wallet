@@ -19,11 +19,13 @@ class WalletProfile extends Component {
     let wallet;
     try {
       const walletInfo = await SInfo.getItem('walletInfo', {
-        sharedPreferencesName: 'plasmaWalletSharedPreference',
-        keychainService: 'plasmaWalletKeyChain',
+        sharedPreferencesName: 'pWalletSharedPreference',
+        keychainService: 'pWalletKeyChain',
       });
+
+      console.log(walletInfo);
       
-      if (walletInfo !== undefined) {
+      if (walletInfo != undefined) {
         const jsonWalletInfo = JSON.parse(walletInfo);
         const { mnemonicWord, privateKey, publicKey, address } = jsonWalletInfo;
         wallet = new Wallet(
@@ -34,7 +36,9 @@ class WalletProfile extends Component {
           publicKey,
           address
         );
+        console.log(wallet);
         await wallet.generatePrivateKey();
+        console.log(wallet);
         this.props.setWallet(wallet);
       } else {
         wallet = new Wallet();
@@ -50,6 +54,8 @@ class WalletProfile extends Component {
           publicKey: wallet.publicKey,
           address: wallet.address,
         };
+
+        console.log(newWalletInfo);
         // ここのpromiseでなにかしらの処理をしてもいい
         SInfo.setItem('walletInfo', JSON.stringify(newWalletInfo), {
           sharedPreferencesName: 'pWalletSharedPreference',

@@ -38,6 +38,7 @@ const finishedGetBalance = balance => ({
 export const sendEther = (wallet, balance, toAddress, value) => (
   function (dispatch) {
     const valueNum = Number(value);
+    console.log(wallet);
     if (
       wallet.bytePrivateKey && 
       balance * 1000000000000000000 >=

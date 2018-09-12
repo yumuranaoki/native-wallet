@@ -15,7 +15,7 @@ class FreindDrawer extends Component {
   async componentDidMount() {
     // async storageからuserIdを取得
     // ということはsignup時にuserIdをasync storageに保存
-    const userId = 1;
+    const userId = 2;
     this.props.getFolloweds(userId);
   }
 
@@ -76,6 +76,7 @@ class FreindDrawer extends Component {
               id={item.id}
               accountId={item.account_id}
               accountName={item.account_name}
+              address={item.address}
               navigation={navigation}
               following={true}
             />

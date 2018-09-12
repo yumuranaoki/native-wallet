@@ -11,6 +11,7 @@ class FriendCard extends Component {
       id: this.props.id,
       accountId: this.props.accountId,
       accountName: this.props.accountName,
+      address: this.props.address,
     });
   }
 

@@ -27,6 +27,7 @@ class SignUp extends Component {
       password: this.state.password,
     };
     const result = await fetch('http://localhost:3000/users', {
+      mode: 'cors',
       method: 'POST',
       body: JSON.stringify(data),
       headers: new Headers({

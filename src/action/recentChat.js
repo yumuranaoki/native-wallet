@@ -4,7 +4,9 @@ export const changeModalState = () => ({
 
 export const onSubmitAccountId = accountId => (
   function (dispatch) {
-    fetch(`http://localhost:3000/users/${accountId}`)
+    fetch(`http://localhost:3000/users/${accountId}`, {
+      mode: 'cors'
+    })
     .then(res => res.json())
     .then(result => dispatch(finishedSubmitAccountId(result)))
     .catch(err => console.log(err));
@@ -18,4 +20,8 @@ const finishedSubmitAccountId = result => ({
 
 export const changeRelation = () => ({
   type: 'CHANGE_RELATION'
+});
+
+export const changeFollowButtonAbility = () => ({
+  type: 'CHANGE_FOLLOW_BUTTON_ABILITY'
 });

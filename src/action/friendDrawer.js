@@ -4,7 +4,9 @@ export const onChangeAccountIdText = accountId => ({
 });
 
 export const getFolloweds = userId => dispatch => {
-  fetch(`http://localhost:3000/users/${userId}/followeds`)
+  fetch(`http://localhost:3000/users/${userId}/followeds`, {
+    mode: 'cors'
+  })
   .then(res => res.json())
   .then(result => dispatch(finishedGetFolloweds(result)))
   .catch(err => console.log(err));

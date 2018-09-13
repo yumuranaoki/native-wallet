@@ -7,6 +7,7 @@ import {
   Dimensions,
   TouchableOpacity,
   Button,
+  AsyncStorage,
 } from 'react-native';
 import 'core-js/es6/map';
 import 'core-js/es6/symbol';
@@ -16,8 +17,48 @@ import 'babel-polyfill';
 const { height, width } = Dimensions.get('window');
 
 class RecentChat extends Component {
-  changeRelation = () => {
-    this.props.changeRelation();
+  changeRelation = async () => {
+    this.props.changeFollowButtonAbility();
+    const followerId = await AsyncStorage.getItem('userId');
+    const followedId = this.props.searchedUser.id;
+    const data = {
+      followerId,
+      followedId,
+    };
+    let jsonResult;
+    if (this.props.following) {
+      try {
+        const result = await fetch('http://localhost:3000/relationships', {
+          mode: 'cors',
+          method: 'DELETE',
+          body: JSON.stringify(data),
+          headers: new Headers({
+            'Content-Type': 'application/json'
+          }),
+        });
+        jsonResult = await result.json();
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      try {
+        const result = await fetch('http://localhost:3000/relationships', {
+          mode: 'cors',
+          method: 'POST',
+          body: JSON.stringify(data),
+          headers: new Headers({
+            'Content-Type': 'application/json'
+          }),
+        });
+        jsonResult = await result.json();
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    if (jsonResult.result === 'success') {
+      this.props.changeRelation();
+    }
+    this.props.changeFollowButtonAbility();
   }
 
   moveToChat = () => {
@@ -100,8 +141,8 @@ class RecentChat extends Component {
           </View>
         </Modal>
         <Button
-        title='check'
-        onPress={() => console.log(searchedUser)}
+          title='check'
+          onPress={() => console.log(searchedUser)}
         />
       </View>
     );

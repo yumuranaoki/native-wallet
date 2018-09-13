@@ -1,9 +1,16 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  AsyncStorage
+} from 'react-native';
 
 class FriendCard extends Component {
   state = {
     following: this.props.following,
+    followButtonDisabled: false,
   };
 
   moveToChat = () => {
@@ -15,8 +22,48 @@ class FriendCard extends Component {
     });
   }
 
-  changeRelation = () => {
-    this.setState({ following: !this.state.following });
+  changeRelation = async () => {
+    this.setState({ followButtonDisabled: true });
+    const followerId = await AsyncStorage.getItem('userId');
+    const followedId = this.props.id;
+    const data = {
+      followerId,
+      followedId,
+    };
+    let jsonResult;
+    if (this.state.following) {
+      try {
+        const result = await fetch('http://localhost:3000/relationships', {
+          mode: 'cors',
+          method: 'DELETE',
+          body: JSON.stringify(data),
+          headers: new Headers({
+            'Content-Type': 'application/json'
+          }),
+        });
+        jsonResult = await result.json();
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      try {
+        const result = await fetch('http://localhost:3000/relationships', {
+          mode: 'cors',
+          method: 'POST',
+          body: JSON.stringify(data),
+          headers: new Headers({
+            'Content-Type': 'application/json'
+          }),
+        });
+        jsonResult = await result.json();
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    if (jsonResult.result === 'success') {
+      this.setState({ following: !this.state.following });
+    }
+    this.setState({ followButtonDisabled: false });
   }
 
   render() {
@@ -76,6 +123,7 @@ class FriendCard extends Component {
       <TouchableOpacity
         style={styles.button}
         onPress={() => this.changeRelation()}
+        disabled={this.state.followButtonDisabled}
       >
         <Text>{following ? 'unfollow' : 'follow'}</Text>
       </TouchableOpacity>

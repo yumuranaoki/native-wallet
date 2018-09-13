@@ -8,6 +8,7 @@ import Profile from '../component/profile/index';
 const { height, width } = Dimensions.get('window');
 const oneThirdWidth = width / 3;
 
+/*
 const SignedUserNavigator = createTabNavigator({
   Chat: {
     screen: createDrawerNavigator({
@@ -22,6 +23,26 @@ const SignedUserNavigator = createTabNavigator({
 }, {
   tabBarPosition: 'bottom',
   swipeEnabled: true,
+  tabBarOptions: {
+    tabStyle: {
+      borderWidth: 3,
+      borderColor: 'black',
+      width: oneThirdWidth,
+    },
+    activeTintColor: 'black',
+    activeBackgroundColor: '#FF7367',
+    inactiveTintColor: 'black',
+    inactiveBackgroundColor: 'white',
+  }
+});
+*/
+
+const SignedUserNavigator = createTabNavigator({
+  Chat: ChatStack,
+  Wallet: WalletProfileConnected,
+  Profile,
+}, {
+  tabBarPosition: 'bottom',
   tabBarOptions: {
     tabStyle: {
       borderWidth: 3,

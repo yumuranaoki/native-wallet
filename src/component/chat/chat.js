@@ -87,6 +87,7 @@ class Chat extends Component {
       console.log(error);
     }
     this.getChatConent();
+    this.registerRoom();
     console.log(this.props.navigation.state);
   }
 
@@ -97,6 +98,19 @@ class Chat extends Component {
       const contents = snapshot.val();
       // async awaitでrewrite
       this.setState({ contents });
+    });
+  }
+
+  registerRoom = () => {
+    this.firebaseDatabase
+    .ref(`room${this.state.userId}/${this.state.partnerId}`)
+    .set({
+      lastMessage: ''
+    });
+    this.firebaseDatabase
+    .ref(`room${this.state.partnerId}/${this.state.userId}`)
+    .set({
+      lastMessage: ''
     });
   }
 
@@ -114,15 +128,54 @@ class Chat extends Component {
       content
     });
     this.setState({ content: '' });
+    
+    // reactのライフサイクルメソッドで適応できる？
+    this.firebaseDatabase
+    .ref(`room${this.state.userId}/${this.state.partnerId}`)
+    .set({
+      lastMessage: content
+    });
+    this.firebaseDatabase
+    .ref(`room${this.state.partnerId}/${this.state.userId}`)
+    .set({
+      lastMessage: content
+    });
   }
 
-  submitEther = content => {
+  submitEther = async (content) => {
     if (Number(content)) {
+      // send ether
       const value = Number(content);
       const { wallet, balance } = this.props;
       console.log(wallet);
       console.log(balance);
-      this.props.sendEther(wallet, balance, this.state.address, value);
+      await this.props.sendEther(wallet, balance, this.state.address, value);
+      
+      // send message 
+      this.firebaseDatabase
+      .ref(`${this.state.userId}/${this.state.partnerId}`)
+      .push({
+        userId: this.state.userId,
+        content: `${Number(content).toString()}Ether送信しました`,
+      });
+      this.firebaseDatabase
+      .ref(`${this.state.partnerId}/${this.state.userId}`)
+      .push({
+        userId: this.state.userId,
+        content: `${Number(content).toString()}Ether送信しました`,
+      });
+      this.setState({ content: '' });
+
+      this.firebaseDatabase
+      .ref(`room${this.state.userId}/${this.state.partnerId}`)
+      .set({
+        lastMessage: `${Number(content).toString()}Ether送信しました`,
+      });
+      this.firebaseDatabase
+      .ref(`room${this.state.partnerId}/${this.state.userId}`)
+      .set({
+        lastMessage: `${Number(content).toString()}Ether送信しました`,
+      });
     }
   }
 

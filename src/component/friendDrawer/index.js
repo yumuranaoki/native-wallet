@@ -8,14 +8,13 @@ import {
   Modal,
   TouchableOpacity,
   Button,
+  AsyncStorage,
 } from 'react-native';
 import FriendCard from './friendCard';
 
 class FreindDrawer extends Component {
   async componentDidMount() {
-    // async storageからuserIdを取得
-    // ということはsignup時にuserIdをasync storageに保存
-    const userId = 2;
+    const userId = await AsyncStorage.getItem('userId');
     this.props.getFolloweds(userId);
   }
 
@@ -26,7 +25,6 @@ class FreindDrawer extends Component {
       followeds,
       onChangeAccountIdText,
       onSubmitAccountId,
-      changeModalState,
     } = this.props;
     const followedsArray = [];
     if (followeds && followeds.followeds_list) {

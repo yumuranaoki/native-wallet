@@ -35,7 +35,7 @@ const finishedGetBalance = balance => ({
   balance,
 });
 
-export const sendEther = (wallet, balance, toAddress, value) => (
+export const sendEther = async (wallet, balance, toAddress, value) => (
   function (dispatch) {
     const valueNum = Number(value);
     console.log(wallet);

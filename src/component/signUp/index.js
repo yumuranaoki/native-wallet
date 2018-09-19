@@ -46,7 +46,7 @@ class SignUp extends Component {
       } catch (err) {
         console.log(err);
       }
-      this.props.navigation.navigate('EntryLoading');
+      this.props.navigation.navigate('SignedUserNavigator');
     }
   };
 

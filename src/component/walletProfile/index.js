@@ -31,6 +31,7 @@ class WalletProfile extends Component {
         wallet = new Wallet(
           mnemonicWord,
           null,
+          null,
           privateKey,
           null,
           publicKey,

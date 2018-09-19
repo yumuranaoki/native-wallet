@@ -7,6 +7,7 @@ import { generateMnemonicWord, fromSeed } from './mnemonicWord';
 class Wallet {
   constructor(
         mnemonicWord = null,
+        password = null,
         bytePrivateKey = null,
         privateKey = null,
         bytePublicKey = null,
@@ -14,6 +15,7 @@ class Wallet {
         address = ''
     ) {
         this.mnemonicWord = mnemonicWord;
+        this.password = password;
         this.bytePrivateKey = bytePrivateKey;
         this.privateKey = privateKey;
         this.bytePublicKey = bytePublicKey;
@@ -28,7 +30,7 @@ class Wallet {
 
   async generatePrivateKey() {
     if (this.mnemonicWord) {
-      const [bytePrivateKey, chainCode] = fromSeed(this.mnemonicWord, '');
+      const [bytePrivateKey, chainCode] = fromSeed(this.mnemonicWord, this.password);
       this.bytePrivateKey = bytePrivateKey;
       let privateKey = '';
       bytePrivateKey.map(byte => {

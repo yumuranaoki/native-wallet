@@ -45,12 +45,13 @@ const NewUser = ({ navigation }) => {
     }
   };
 
+  // 一旦ただの繊維を試す
   return (
     <View style={styles.container}>
       <MyButton onPressedFunction={() => navigation.navigate('SignIn')}>
         sign in
       </MyButton>
-      <MyButton onPressedFunction={() => setUpWallet()}>
+      <MyButton onPressedFunction={() => navigation.navigate('SignUp')}>
         sign up
       </MyButton>
     </View>

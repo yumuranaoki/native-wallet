@@ -7,49 +7,9 @@ import {
   TextInput,
   AsyncStorage,
 } from 'react-native';
+import Modal from 'react-native-modal';
 
 class SignUp extends Component {
-  state = {
-    accountName: '',
-    accountId: '',
-    password: '',
-    passwordHidden: true,
-  };
-
-  setUpProfile = async () => {
-    const accessToken = this.props.navigation.getParam('accessToken');
-    const address = this.props.navigation.getParam('address');
-    const data = {
-      accessToken,
-      address,
-      accountName: this.state.accountName,
-      accountId: this.state.accountId,
-      password: this.state.password,
-    };
-    const result = await fetch('http://localhost:3000/users', {
-      mode: 'cors',
-      method: 'POST',
-      body: JSON.stringify(data),
-      headers: new Headers({
-        'Content-Type': 'application/json'
-      }),
-    });
-    const jsonResult = await result.json();
-    if (jsonResult.message) {
-      // alertでerrorを表示
-      console.log(jsonResult.message);
-    } else {
-      const userId = jsonResult.user_id.toString();
-      // async storageでaccountIdとaccountNameをstore
-      try {
-        AsyncStorage.setItem('userId', userId);
-      } catch (err) {
-        console.log(err);
-      }
-      this.props.navigation.navigate('SignedUserNavigator');
-    }
-  };
-
   render() {
     const styles = StyleSheet.create({
       container: {
@@ -79,6 +39,22 @@ class SignUp extends Component {
       },
     });
 
+    const {
+      accountName,
+      accountId,
+      password,
+      passwordConfirmation,
+      passwordHidden,
+      isMnemonicWordModalVisible,
+      wallet,
+      onChangeAccountNameTextInSignUp,
+      onChangeAccountIdTextInSignUp,
+      onChangePasswordTextInSignUp,
+      onChangePasswordConfirmationTextInSignUp,
+      setUpAccount,
+      onMnemonicWordModalSwipe,
+    } = this.props;
+
     return (
       <View style={styles.container}>
         <Text>
@@ -86,30 +62,48 @@ class SignUp extends Component {
         </Text>
         <TextInput
           style={styles.textInput}
-          value={this.state.accountName}
-          onChangeText={text => this.setState({ accountName: text })}
-          placeholder='account name'
+          value={accountName}
+          onChangeText={text => onChangeAccountNameTextInSignUp(text)}
+          placeholder='アカウント名'
         />
         <TextInput
           style={styles.textInput}
-          value={this.state.accountId}
-          onChangeText={text => this.setState({ accountId: text })}
-          placeholder='account id'
+          value={accountId}
+          onChangeText={text => onChangeAccountIdTextInSignUp(text)}
+          placeholder='アカウントのID'
         />
         <TextInput
           style={styles.textInput}
-          value={this.state.password}
-          onChangeText={text => this.setState({ password: text })}
-          secureTextEntry={this.state.passwordHidden}
-          placeholder='password'
+          value={password}
+          onChangeText={text => onChangePasswordTextInSignUp(text)}
+          secureTextEntry={passwordHidden}
+          placeholder='パスワード'
         />
-        <TouchableOpacity onPress={() => this.setUpProfile()}>
+        <TextInput
+          style={styles.textInput}
+          value={passwordConfirmation}
+          onChangeText={text => onChangePasswordConfirmationTextInSignUp(text)}
+          secureTextEntry={passwordHidden}
+          placeholder='パスワードの確認'
+        />
+        <TouchableOpacity
+          onPress={() => setUpAccount(accountName, accountId, password, passwordConfirmation)}
+        >
           <View style={styles.button}>
             <Text style={styles.buttonText}>
               enter
             </Text>
           </View>
         </TouchableOpacity>
+        <Modal
+          isVisible={isMnemonicWordModalVisible}
+          onSwipe={() => onMnemonicWordModalSwipe()}
+          swipeDirection="down"
+        >
+          <Text>
+            {wallet.mnemonicWord}
+          </Text>
+        </Modal>
       </View>
     );
   }

@@ -5,6 +5,7 @@ const initialState = {
   passwordConfirmation: '',
   passwordHidden: true,
   isMnemonicWordModalVisible: false,
+  isAbleToMoveToSignedInUserScreen: false,
 };
 
 const signUpReducer = (state = initialState, action) => {
@@ -21,6 +22,8 @@ const signUpReducer = (state = initialState, action) => {
       return { ...state, passwordHidden: !state.passwordHidden };
     case 'ON_MNEMONIC_WORD_MODAL_SWIPE':
       return { ...state, isMnemonicWordModalVisible: !state.isMnemonicWordModalVisible };
+    case 'ON_PRESS_CONFIRM_BUTTON':
+      return { ...state, isAbleToMoveToSignedInUserScreen: true }
     default:
       return state;
   }

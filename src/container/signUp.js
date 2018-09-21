@@ -8,6 +8,7 @@ import {
   changePasswordHiddenInSignUp,
   setUpAccount,
   onMnemonicWordModalSwipe,
+  onPressConfirmButton,
 } from '../action/signUp';
 
 const mapStateToProps = state => ({
@@ -17,6 +18,8 @@ const mapStateToProps = state => ({
   passwordConfirmation: state.signUpReducer.passwordConfirmation,
   passwordHidden: state.signUpReducer.passwordHidden,
   isMnemonicWordModalVisible: state.signUpReducer.isMnemonicWordModalVisible,
+  isAbleToMoveToSignedInUserScreen: state.signUpReducer.isAbleToMoveToSignedInUserScreen,
+  wallet: state.walletReducer.wallet,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -29,6 +32,7 @@ const mapDispatchToProps = dispatch => ({
   setUpAccount: (accountName, accountId, password, passwordConfirmation) =>
     dispatch(setUpAccount(accountName, accountId, password, passwordConfirmation)),
   onMnemonicWordModalSwipe: () => dispatch(onMnemonicWordModalSwipe()),
+  onPressConfirmButton: () => dispatch(onPressConfirmButton()),
 });
 
 const signUpConnected = connect(

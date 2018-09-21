@@ -5,6 +5,7 @@ import recentChatReducer from './recentChat';
 import chatReducer from './chat';
 import enterPasswordReducer from './enterPassword';
 import signUpReducer from './signUp';
+import walletReducer from './wallet';
 
 const reducer = combineReducers({
   walletProfileReducer,
@@ -13,6 +14,7 @@ const reducer = combineReducers({
   chatReducer,
   enterPasswordReducer,
   signUpReducer,
+  walletReducer,
 });
 
 export default reducer;

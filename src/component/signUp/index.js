@@ -10,6 +10,12 @@ import {
 import Modal from 'react-native-modal';
 
 class SignUp extends Component {
+  componentDidUpdate() {
+    if (this.props.isAbleToMoveToSignedInUserScreen) {
+      this.props.navigation.navigate('SignedUserNavigator');
+    }
+  }
+
   render() {
     const styles = StyleSheet.create({
       container: {
@@ -53,6 +59,7 @@ class SignUp extends Component {
       onChangePasswordConfirmationTextInSignUp,
       setUpAccount,
       onMnemonicWordModalSwipe,
+      onPressConfirmButton
     } = this.props;
 
     return (
@@ -103,6 +110,13 @@ class SignUp extends Component {
           <Text>
             {wallet.mnemonicWord}
           </Text>
+          <TouchableOpacity
+            onPress={() => onPressConfirmButton()}
+          >
+            <Text>
+              ニーモニックワードを確認しました
+            </Text>
+          </TouchableOpacity>
         </Modal>
       </View>
     );

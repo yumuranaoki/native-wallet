@@ -83,3 +83,7 @@ const afterFinishedSetUpAccount = wallet => ({
 export const onMnemonicWordModalSwipe = () => ({
   type: 'ON_MNEMONIC_WORD_MODAL_SWIPE'
 });
+
+export const onPressConfirmButton = () => ({
+  type: 'ON_PRESS_CONFIRMATION_BUTTON'
+});

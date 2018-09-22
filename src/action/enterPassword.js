@@ -15,8 +15,9 @@ export const changeSecurity = () => ({
 export const enterPassword = password => async (dispatch) => {
   try {
     const userId = await AsyncStorage.getItem('userId');
+    console.log(userId);
     const data = {
-      userId,
+      userId: Number(userId),
       password,
     };
     const result = await fetch('http://localhost:3000/auth', {
@@ -49,10 +50,15 @@ const finishedEnterPassword = password => async (dispatch) => {
   await wallet.generatePrivateKey();
   await wallet.generatePublicKey();
   await wallet.generateAddress();
-  dispatch(afterFinishedEnterPassword(wallet));
+  dispatch(setUpWallet(wallet));
+  dispatch(afterFinishedEnterPassword());
 };
 
-const afterFinishedEnterPassword = wallet => ({
-  type: 'AFTER_FINISHED_ENTER_PASSWORD',
+const setUpWallet = wallet => ({
+  type: 'AFTER_FINISHED_SET_UP_ACCOUNT',
   wallet,
+});
+
+const afterFinishedEnterPassword = () => ({
+  type: 'AFTER_FINISHED_ENTER_PASSWORD',
 });

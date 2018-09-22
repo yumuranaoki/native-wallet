@@ -15,6 +15,14 @@ const signInReducer = (state = initialState, action) => {
       return { ...state, mnemonicWord: action.mnemonicWord };
     case 'MOVE_TO_SIGNED_IN_USER':
       return { ...state, isAbleToMoveToSignedInUser: true };
+    case 'RESET_STATE_IN_SIGN_IN':
+     return {
+       ...state,
+       accountId: '',
+      password: '',
+      mnemonicWord: '',
+      isAbleToMoveToSignedInUser: false,
+     };
     default:
       return state;
   }

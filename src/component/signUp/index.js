@@ -10,10 +10,17 @@ import {
 import Modal from 'react-native-modal';
 
 class SignUp extends Component {
-  componentDidUpdate() {
+  async componentDidUpdate() {
     if (this.props.isAbleToMoveToSignedInUserScreen) {
-      this.props.navigation.navigate('SignedUserNavigator');
+      const userId = await AsyncStorage.getItem('userId');
+      if (userId) {
+        this.props.navigation.navigate('SignedUserNavigator');
+      }      
     }
+  }
+
+  componentWillUnmount() {
+    this.props.resetState();
   }
 
   render() {
@@ -42,6 +49,13 @@ class SignUp extends Component {
         width: 200,
         marginBottom: 30,
         marginTop: 10,
+      },
+      modalView: {
+        backgroundColor: 'white',
+        borderRadius: 10,
+        flex: 1,
+        alignItems: 'center',
+        marginTop: 20,
       },
     });
 
@@ -107,16 +121,20 @@ class SignUp extends Component {
           onSwipe={() => onMnemonicWordModalSwipe()}
           swipeDirection="down"
         >
-          <Text>
-            {wallet.mnemonicWord}
-          </Text>
-          <TouchableOpacity
-            onPress={() => onPressConfirmButton()}
+          <View
+            style={styles.modalView}
           >
             <Text>
-              ニーモニックワードを確認しました
+              {wallet ? wallet.mnemonicWord : ''}
             </Text>
-          </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => onPressConfirmButton()}
+            >
+              <Text>
+                ニーモニックワードを確認しました
+              </Text>
+            </TouchableOpacity>
+          </View>
         </Modal>
       </View>
     );

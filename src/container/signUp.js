@@ -9,6 +9,7 @@ import {
   setUpAccount,
   onMnemonicWordModalSwipe,
   onPressConfirmButton,
+  resetState,
 } from '../action/signUp';
 
 const mapStateToProps = state => ({
@@ -33,6 +34,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(setUpAccount(accountName, accountId, password, passwordConfirmation)),
   onMnemonicWordModalSwipe: () => dispatch(onMnemonicWordModalSwipe()),
   onPressConfirmButton: () => dispatch(onPressConfirmButton()),
+  resetState: () => dispatch(resetState()),
 });
 
 const signUpConnected = connect(

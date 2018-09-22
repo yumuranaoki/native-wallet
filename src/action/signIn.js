@@ -41,7 +41,7 @@ export const signIn = (accountId, password, mnemonicWord) => async (dispatch) =>
     });
     const jsonResult = await result.json();
     if (jsonResult.result === 'success') {
-      const userId = jsonResult.user_id;
+      const userId = jsonResult.user_id.toString();
       await AsyncStorage.setItem('userId', userId);
       SInfo.setItem('accessToken', accessToken, {
         sharedPreferencesName: 'pWalletSharedPreference',
@@ -51,6 +51,7 @@ export const signIn = (accountId, password, mnemonicWord) => async (dispatch) =>
         sharedPreferencesName: 'pWalletSharedPreference',
         keychainService: 'pWalletKeyChain',
       });
+      console.log('ここまで');
       dispatch(moveToSignedInUser());
       dispatch(setWallet(wallet));
     } 
@@ -59,11 +60,17 @@ export const signIn = (accountId, password, mnemonicWord) => async (dispatch) =>
   }
 };
 
-const moveToSignedInUser = () => ({
+const moveToSignedInUser = () => {
+  console.log('moved to signed in user');
+  return {
   type: 'MOVE_TO_SIGNED_IN_USER',
-});
+};
+};
 
-const setWallet = wallet => ({
+const setWallet = wallet => {
+  console.log('wallet is set');
+  return {
   type: 'AFTER_FINISHED_SET_UP_ACCOUNT',
   wallet,
-});
+};
+};

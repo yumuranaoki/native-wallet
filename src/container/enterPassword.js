@@ -5,7 +5,6 @@ import { onChangePasswordText, changeSecurity, enterPassword } from '../action/e
 const mapStateToProps = state => ({
   password: state.enterPasswordReducer.password,
   security: state.enterPasswordReducer.security,
-  wallet: state.enterPasswordReducer.wallet,
   navigationAbility: state.enterPasswordReducer.navigationAbility,
 });
 

@@ -7,6 +7,7 @@ import {
   AsyncStorage,
   TextInput,
 } from 'react-native';
+import SInfo from 'react-native-sensitive-info';
 
 const styles = StyleSheet.create({
   container: {
@@ -47,29 +48,18 @@ class Profile extends Component {
   }
 
   logout = async () => {
-    const userId = await AsyncStorage.getItem('userId');
-    const data = {
-      userId
-    };
-    try {
-      const result = await fetch('http://localhost:3000/users/', {
-        mode: 'cors',
-        method: 'DELETE',
-        body: JSON.stringify(data),
-        headers: new Headers({
-          'Content-Type': 'application/json'
-        })
-      });
-      const jsonResult = await result.json();
-      if (jsonResult.result === 'success') {
-        // local storageを全削除
-        await AsyncStorage.removeItem('userId');
-        // entryLoadingへ
-        this.props.navigation.navigate('NewUserNavigator');
-      }
-    } catch (err) {
-      console.log(err);
-    }
+    // local storageを全削除
+    await AsyncStorage.removeItem('userId');
+    SInfo.deleteItem('accessToken', {
+      sharedPreferencesName: 'pWalletSharedPreference',
+      keychainService: 'pWalletKeyChain',
+    });
+    SInfo.deleteItem('mnemonicWord', {
+      sharedPreferencesName: 'pWalletSharedPreference',
+      keychainService: 'pWalletKeyChain',
+    });
+    // entryLoadingへ
+    this.props.navigation.navigate('NewUserNavigator');
   }
 
   render() {

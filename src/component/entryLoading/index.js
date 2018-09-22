@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import {
   View,
   Text,
-  StyleSheet
+  StyleSheet,
+  AsyncStorage
 } from 'react-native';
 import SInfo from 'react-native-sensitive-info';
 
@@ -12,13 +13,18 @@ class EntryLoading extends Component {
   }
 
   checkUser = async () => {
+    const userId = await AsyncStorage.getItem('userId');
     const acessToken = await SInfo.getItem('accessToken', {
+      sharedPreferencesName: 'pWalletSharedPreference',
+      keychainService: 'pWalletKeyChain',
+    });
+    const mnemonicWord = SInfo.getItem('mnemonicWord', {
       sharedPreferencesName: 'pWalletSharedPreference',
       keychainService: 'pWalletKeyChain',
     });
     
     this.props.navigation.navigate(
-      acessToken ? 'EnterPasswordConnected' : 'NewUserNavigator'
+      userId && acessToken && mnemonicWord ? 'EnterPasswordConnected' : 'NewUserNavigator'
     );
     
    // this.props.navigation.navigate('NewUserNavigator');

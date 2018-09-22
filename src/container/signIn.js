@@ -3,21 +3,25 @@ import SignIn from '../component/signIn/index';
 import {
   onChangeAccountIdTextInSignIn,
   onChangePasswordTextInSignIn,
-  onChnageMnemonicWordTextInSignIn,
-  signIn
+  onChangeMnemonicWordTextInSignIn,
+  signIn,
+  resetState,
 } from '../action/signIn';
 
 const mapStateToProps = state => ({
   accountId: state.signInReducer.accountId,
   password: state.signInReducer.password,
-  mnemonicWord: state.signInReducer.mnemonicWord
+  mnemonicWord: state.signInReducer.mnemonicWord,
+  isAbleToMoveToSignedInUser: state.signInReducer.isAbleToMoveToSignedInUser,
 });
 
 const mapDispatchToProps = dispatch => ({
   onChangeAccountIdTextInSignIn: text => dispatch(onChangeAccountIdTextInSignIn(text)),
   onChangePasswordTextInSignIn: text => dispatch(onChangePasswordTextInSignIn(text)),
-  onChnageMnemonicWordTextInSignIn: text => dispatch(onChnageMnemonicWordTextInSignIn(text)),
-  signIn: (accountId, password, mnemonicWord) => dispatch(signIn(accountId, password, mnemonicWord))
+  onChangeMnemonicWordTextInSignIn: text => dispatch(onChangeMnemonicWordTextInSignIn(text)),
+  signIn: (accountId, password, mnemonicWord) => 
+    dispatch(signIn(accountId, password, mnemonicWord)),
+  resetState: () => dispatch(resetState()),
 });
 
 const SignInConnected = connect(

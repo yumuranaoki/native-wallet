@@ -8,7 +8,7 @@ export const onChangeAccountNameTextInSignUp = text => ({
 });
 
 export const onChangeAccountIdTextInSignUp = text => ({
-  type: 'ON_CHNAGE_ACCOUNT_ID_TEXT_IN_SIGN_UP',
+  type: 'ON_CHANGE_ACCOUNT_ID_TEXT_IN_SIGN_UP',
   accountId: text
 });
 
@@ -18,7 +18,7 @@ export const onChangePasswordTextInSignUp = text => ({
 });
 
 export const onChangePasswordConfirmationTextInSignUp = text => ({
-  type: 'ON_CHNAGE_PASSWORD_CONFIRMATION_TEXT_IN_SIGN_UP',
+  type: 'ON_CHANGE_PASSWORD_CONFIRMATION_TEXT_IN_SIGN_UP',
   passwordConfirmation: text
 });
 
@@ -35,16 +35,19 @@ export const setUpAccount = (accountName, accountId, password, passwordConfirmat
       );
       await wallet.setMnemonicWord();
       await wallet.generatePrivateKey();
-      await wallet.generateAddress();
+      await wallet.generatePublicKey();
+      const address = await wallet.generateAddress();
       const accessToken = await wallet.generateAccessToken();
+      console.log(wallet);
       const data = {
         accountName,
         accountId,
         password,
         passwordConfirmation,
         accessToken,
-        address: wallet.address
+        address,
       };
+      console.log(data);
       const result = await fetch('http://localhost:3000/users', {
         mode: 'cors',
         method: 'POST',
@@ -53,18 +56,23 @@ export const setUpAccount = (accountName, accountId, password, passwordConfirmat
           'Content-Type': 'application/json'
         })
       });
+      console.log(result);
       const jsonResult = await result.json();
+      console.log(jsonResult);
       if (jsonResult.result === 'success') {
-        const userId = jsonResult.userId;
-        AsyncStorage.setItem('userId', userId);
+        const userId = jsonResult.user_id.toString();
+        await AsyncStorage.setItem('userId', userId);
         SInfo.setItem('accessToken', accessToken, {
           sharedPreferencesName: 'pWalletSharedPreference',
           keychainService: 'pWalletKeyChain',
         });
+        console.log(wallet);
+        console.log(wallet.mnemonicWord);
         SInfo.setItem('mnemonicWord', wallet.mnemonicWord, {
           sharedPreferencesName: 'pWalletSharedPreference',
           keychainService: 'pWalletKeyChain',
         });
+        console.log('ここまで');
         dispatch(afterFinishedSetUpAccount(wallet));
         dispatch(onMnemonicWordModalSwipe());
       } else {
@@ -85,6 +93,9 @@ export const onMnemonicWordModalSwipe = () => ({
 });
 
 export const onPressConfirmButton = () => ({
-  type: 'ON_PRESS_CONFIRMATION_BUTTON'
+  type: 'ON_PRESS_CONFIRM_BUTTON'
 });
 
+export const resetState = () => ({
+  type: 'RESET_STATE_IN_SIGN_UP',
+});

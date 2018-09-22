@@ -5,6 +5,7 @@ import recentChatReducer from './recentChat';
 import chatReducer from './chat';
 import enterPasswordReducer from './enterPassword';
 import signUpReducer from './signUp';
+import signInReducer from './signIn';
 import walletReducer from './wallet';
 
 const reducer = combineReducers({
@@ -14,6 +15,7 @@ const reducer = combineReducers({
   chatReducer,
   enterPasswordReducer,
   signUpReducer,
+  signInReducer,
   walletReducer,
 });
 

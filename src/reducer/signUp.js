@@ -23,7 +23,17 @@ const signUpReducer = (state = initialState, action) => {
     case 'ON_MNEMONIC_WORD_MODAL_SWIPE':
       return { ...state, isMnemonicWordModalVisible: !state.isMnemonicWordModalVisible };
     case 'ON_PRESS_CONFIRM_BUTTON':
-      return { ...state, isAbleToMoveToSignedInUserScreen: true }
+      return { ...state, isAbleToMoveToSignedInUserScreen: true };
+    case 'RESET_STATE_IN_SIGN_UP':
+      return {
+        ...state,
+        accountName: '',
+        accountId: '',
+        password: '',
+        passwordConfirmation: '',
+        isMnemonicWordModalVisible: false,
+        isAbleToMoveToSignedInUserScreen: false,
+      };
     default:
       return state;
   }

@@ -15,7 +15,7 @@ import {
 } from '../action/walletProfile';
 
 const mapStateToProps = state => ({
-  wallet: state.walletProfileReducer.wallet,
+  wallet: state.walletReducer.wallet,
   balance: state.walletProfileReducer.balance,
   ERC20Balance: state.walletProfileReducer.ERC20Balance,
   toAddress: state.walletProfileReducer.toAddress,

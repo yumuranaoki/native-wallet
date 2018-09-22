@@ -15,7 +15,8 @@ import ERC20Card from './erc20Card';
 class WalletProfile extends Component {
   async componentDidMount() {
     // addressがないuserには、walletを作成
-    // addressがあるuserにはaddressを引っ張ってくる 
+    // addressがあるuserにはaddressを引っ張ってくる
+    /* 
     let wallet;
     try {
       const walletInfo = await SInfo.getItem('walletInfo', {
@@ -66,9 +67,10 @@ class WalletProfile extends Component {
     } catch (error) {
       console.log(error);
     }
+    */
 
     // walletがあればここでbalanceを取得
-    if (wallet) {
+    if (this.props.wallet) {
       this.props.getBalance(wallet);
       console.log(wallet.address);
     }

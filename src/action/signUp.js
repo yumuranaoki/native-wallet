@@ -1,6 +1,5 @@
-import {
-  AsyncStorage
-} from 'react-native';
+import { AsyncStorage } from 'react-native';
+import SInfo from 'react-native-sensitive-info';
 import Wallet from '../util/wallet';
 
 export const onChangeAccountNameTextInSignUp = text => ({
@@ -29,13 +28,23 @@ export const changePasswordHiddenInSignUp = () => ({
 
 export const setUpAccount = (accountName, accountId, password, passwordConfirmation) => 
   async (dispatch) => {
-    const data = {
-      accountName,
-      accountId,
-      password,
-      passwordConfirmation,
-    };
     try {
+      const wallet = new Wallet(
+        null,
+        password,
+      );
+      await wallet.setMnemonicWord();
+      await wallet.generatePrivateKey();
+      await wallet.generateAddress();
+      const accessToken = await wallet.generateAccessToken();
+      const data = {
+        accountName,
+        accountId,
+        password,
+        passwordConfirmation,
+        accessToken,
+        address: wallet.address
+      };
       const result = await fetch('http://localhost:3000/users', {
         mode: 'cors',
         method: 'POST',
@@ -48,31 +57,22 @@ export const setUpAccount = (accountName, accountId, password, passwordConfirmat
       if (jsonResult.result === 'success') {
         const userId = jsonResult.userId;
         AsyncStorage.setItem('userId', userId);
-        dispatch(finishedSetUpAccount(password));
+        SInfo.setItem('accessToken', accessToken, {
+          sharedPreferencesName: 'pWalletSharedPreference',
+          keychainService: 'pWalletKeyChain',
+        });
+        SInfo.setItem('mnemonicWord', wallet.mnemonicWord, {
+          sharedPreferencesName: 'pWalletSharedPreference',
+          keychainService: 'pWalletKeyChain',
+        });
+        dispatch(afterFinishedSetUpAccount(wallet));
+        dispatch(onMnemonicWordModalSwipe());
       } else {
         console.log(jsonResult.result);
       }
     } catch (error) {
       console.log(error);
     }
-};
-
-const finishedSetUpAccount = password => async (dispatch) => {
-  const wallet = new Wallet(
-    null,
-    password,
-    null,
-    null,
-    null,
-    null,
-    null
-  );
-  await wallet.setMnemonicWord();
-  await wallet.generatePrivateKey();
-  await wallet.generateAddress();
-  // walletはwallet用のreducerを用意。actionやcontainerは作成しない
-  dispatch(afterFinishedSetUpAccount(wallet));
-  dispatch(onMnemonicWordModalSwipe());
 };
 
 const afterFinishedSetUpAccount = wallet => ({
@@ -87,3 +87,4 @@ export const onMnemonicWordModalSwipe = () => ({
 export const onPressConfirmButton = () => ({
   type: 'ON_PRESS_CONFIRMATION_BUTTON'
 });
+

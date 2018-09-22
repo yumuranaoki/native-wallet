@@ -19,7 +19,7 @@ export const enterPassword = password => async (dispatch) => {
       userId,
       password,
     };
-    const result = await fetch('http://localhost:3000/users/auth', {
+    const result = await fetch('http://localhost:3000/auth', {
       mode: 'cors',
       method: 'POST',
       body: JSON.stringify(data),
@@ -45,11 +45,6 @@ const finishedEnterPassword = password => async (dispatch) => {
   const wallet = new Wallet(
     mnemonicWord,
     password,
-    null,
-    null,
-    null,
-    null,
-    null
   );
   await wallet.generatePrivateKey();
   await wallet.generatePublicKey();

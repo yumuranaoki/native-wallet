@@ -1,11 +1,11 @@
 import { createStackNavigator } from 'react-navigation';
 import NewUser from '../component/newUser/index';
-import SignIn from '../component/signIn/index';
+import SignInConnected from '../container/signIn';
 import SignUpConnected from '../container/signUp';
 
 const NewUserNavigator = createStackNavigator({
   NewUser,
-  SignIn,
+  SignInConnected,
   SignUpConnected,
 }, {
   initialRouteName: 'NewUser'

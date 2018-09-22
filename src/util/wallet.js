@@ -8,19 +8,9 @@ class Wallet {
   constructor(
         mnemonicWord = null,
         password = null,
-        bytePrivateKey = null,
-        privateKey = null,
-        bytePublicKey = null,
-        publicKey = null,
-        address = ''
     ) {
         this.mnemonicWord = mnemonicWord;
         this.password = password;
-        this.bytePrivateKey = bytePrivateKey;
-        this.privateKey = privateKey;
-        this.bytePublicKey = bytePublicKey;
-        this.publicKey = publicKey;
-        this.address = address;
   }
 
   async setMnemonicWord() {

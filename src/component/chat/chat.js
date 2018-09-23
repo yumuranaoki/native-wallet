@@ -63,22 +63,22 @@ const styles = StyleSheet.create({
   },
 });
 
-class Chat extends Component {
-  // walletはreduxで管理
-  state = {
-    userId: null,
-    partnerId: null,
-    address: null,
-    content: '', // TextInputの値
-    contents: null
-  };
+class Chat extends Component { 
+  constructor(props) {
+    super(props);
+    this.state = {
+      userId: null,
+      partnerId: this.props.navigation.getParam('id'),
+      partnerAccountName: this.props.navigation.getParam('accountName'),
+      address: this.props.navigation.getParam('address'),
+      content: '', // TextInputの値
+      contents: null
+    };
+
+  }
 
   async componentDidMount() {
     this.firebaseDatabase = firebase.database();
-    this.setState({
-      partnerId: this.props.navigation.getParam('id'),
-      address: this.props.navigation.getParam('address'),
-    });
     // userIdを取得
     try {
       const userId = await AsyncStorage.getItem('userId');
@@ -105,11 +105,7 @@ class Chat extends Component {
     this.firebaseDatabase
     .ref(`room${this.state.userId}/${this.state.partnerId}`)
     .set({
-      lastMessage: ''
-    });
-    this.firebaseDatabase
-    .ref(`room${this.state.partnerId}/${this.state.userId}`)
-    .set({
+      partner: this.state.partnerAccountName,
       lastMessage: ''
     });
   }
@@ -133,11 +129,13 @@ class Chat extends Component {
     this.firebaseDatabase
     .ref(`room${this.state.userId}/${this.state.partnerId}`)
     .set({
+      partner: this.state.partnerAccountName,
       lastMessage: content
     });
     this.firebaseDatabase
     .ref(`room${this.state.partnerId}/${this.state.userId}`)
     .set({
+      // 自分のaccountName
       lastMessage: content
     });
   }
@@ -169,11 +167,13 @@ class Chat extends Component {
       this.firebaseDatabase
       .ref(`room${this.state.userId}/${this.state.partnerId}`)
       .set({
+        partner: this.state.partnerAccountName,
         lastMessage: `${Number(content).toString()}Ether送信しました`,
       });
       this.firebaseDatabase
       .ref(`room${this.state.partnerId}/${this.state.userId}`)
       .set({
+        // 自分のaccountName
         lastMessage: `${Number(content).toString()}Ether送信しました`,
       });
     }

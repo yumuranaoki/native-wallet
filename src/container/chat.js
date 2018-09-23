@@ -3,7 +3,7 @@ import Chat from '../component/chat/chat';
 import { sendEther } from '../action/walletProfile';
 
 const mapStateToProps = state => ({
-  wallet: state.walletProfileReducer.wallet,
+  wallet: state.walletReducer.wallet,
   balance: state.walletProfileReducer.balance,
 });
 

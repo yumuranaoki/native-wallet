@@ -60,17 +60,15 @@ export const signIn = (accountId, password, mnemonicWord) => async (dispatch) =>
   }
 };
 
-const moveToSignedInUser = () => {
-  console.log('moved to signed in user');
-  return {
+const moveToSignedInUser = () => ({
   type: 'MOVE_TO_SIGNED_IN_USER',
-};
-};
+});
 
-const setWallet = wallet => {
-  console.log('wallet is set');
-  return {
+const setWallet = wallet => ({
   type: 'AFTER_FINISHED_SET_UP_ACCOUNT',
   wallet,
-};
-};
+});
+
+export const resetState = () => ({
+  type: 'RESET_STATE_IN_SIGN_IN',
+});

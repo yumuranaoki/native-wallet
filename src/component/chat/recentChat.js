@@ -6,8 +6,8 @@ import {
   Modal,
   Dimensions,
   TouchableOpacity,
-  Button,
   AsyncStorage,
+  FlatList,
 } from 'react-native';
 import 'core-js/es6/map';
 import 'core-js/es6/symbol';
@@ -17,6 +17,10 @@ import 'babel-polyfill';
 const { height, width } = Dimensions.get('window');
 
 class RecentChat extends Component {
+  componentDidMount() {
+    this.props.getUsers();
+  }
+
   changeRelation = async () => {
     this.props.changeFollowButtonAbility();
     const followerId = await AsyncStorage.getItem('userId');
@@ -76,13 +80,14 @@ class RecentChat extends Component {
       following,
       searchedUser,
       changeModalState,
+      recentChatData,
     } = this.props;
     const searchedUserWrapper = searchedUser || { id: '', account_id: '', account_name: '' };
     const styles = StyleSheet.create({
       container: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'stretch'
       },
       modalContainer: {
         flex: 1,
@@ -98,13 +103,46 @@ class RecentChat extends Component {
         justifyContent: 'center',
         alignItems: 'center',
       },
+      recentChatData: {
+        borderColor: '#ccc',
+        borderWidth: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        height: 40,
+        backgroundColor: 'white',
+      },
+      accountName: {
+        flex: 1,
+        alignItems: 'center'
+      },
+      lastMessage: {
+        flex: 2,
+        alignItems: 'center'
+      },
     });
     
     return (
       <View style={styles.container}>
-        <Text>
-          This is recent chat
-        </Text>
+        <FlatList
+          data={recentChatData}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              style={styles.recentChatData}
+            >
+              <View
+                style={styles.accountName}
+              >
+                <Text>{item.partner}</Text>
+              </View>
+              <View
+                style={styles.lastMessage}
+              >
+                <Text>{item.lastMessage}</Text>
+              </View>
+            </TouchableOpacity>
+          )}
+        />
 
         <Modal
           visible={modalVisible}
@@ -140,10 +178,6 @@ class RecentChat extends Component {
             </View>
           </View>
         </Modal>
-        <Button
-          title='check'
-          onPress={() => console.log(searchedUser)}
-        />
       </View>
     );
   }

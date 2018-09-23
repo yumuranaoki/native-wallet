@@ -3,6 +3,7 @@ const initialState = {
   following: false,
   modalVisible: false,
   followButtonDisabled: true,
+  recentChatData: [],
 };
 
 const recentChatReducer = (state = initialState, action) => {
@@ -14,7 +15,9 @@ const recentChatReducer = (state = initialState, action) => {
     case 'CHANGE_RELATION':
       return { ...state, following: !state.following };
     case 'CHANGE_FOLLOW_BUTTON_ABILITY':
-    return { ...state, followButtonDisabled: !state.followButtonDisabled };
+      return { ...state, followButtonDisabled: !state.followButtonDisabled };
+    case 'FINISHED_GET_USERS':
+      return { ...state, recentChatData: action.recentChatData };
     default:
       return state;
   }

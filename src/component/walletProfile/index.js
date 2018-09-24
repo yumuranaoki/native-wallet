@@ -28,9 +28,6 @@ class WalletProfile extends Component {
         <View style={styles.cardConteiner}>
           <Card {...this.props} name='Ether' />
         </View>
-        <View style={styles.cardConteiner}>
-          <ERC20Card {...this.props} name='Other ERC20' />
-        </View>        
          
         <SendModal {...this.props} />
         <GetModal {...this.props} />

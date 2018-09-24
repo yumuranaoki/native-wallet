@@ -46,13 +46,12 @@ class MnemonicWord extends Component {
       },
       headerText: {
         marginLeft: 10,
-        marginTop: 10,
         fontSize: 20,
         fontWeight: '600',
       },
       backText: {
         color: 'blue',
-        fontSize: 15,
+        fontSize: 17,
         fontWeight: '300',
       },
       back: {
@@ -68,6 +67,7 @@ class MnemonicWord extends Component {
       >
         <TouchableOpacity
           style={styles.back}
+          onPress={() => this.props.navigation.goBack()}
         >
           <Text style={styles.backText}>Back</Text>
         </TouchableOpacity>

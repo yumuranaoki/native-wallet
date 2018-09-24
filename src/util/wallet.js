@@ -8,9 +8,17 @@ class Wallet {
   constructor(
         mnemonicWord = null,
         password = null,
+        network = 'kovan',
     ) {
         this.mnemonicWord = mnemonicWord;
         this.password = password;
+        this.network = network;
+        this.networkId = {
+            mainnet: 1,
+            ropsten: 3,
+            rinkeby: 4,
+            kovan: 42,
+        };
   }
 
   async setMnemonicWord() {
@@ -85,9 +93,9 @@ class Wallet {
                 jsonrpc: '2.0', 
                 method: 'eth_getTransactionCount', 
                 params: [this.address, 'latest'], 
-                id: 42
+                id: this.networkId[this.network]
             };
-            fetch('https://kovan.infura.io/Y80MvxYEzKUddrYMy9Xj', {
+            fetch(`https://${this.network}.infura.io/Y80MvxYEzKUddrYMy9Xj`, {
                 method: 'POST',
                 body: JSON.stringify(ethGetTransactionCount),
                 headers: new Headers({
@@ -109,10 +117,10 @@ async getBalance() {
         jsonrpc: '2.0',
         method: 'eth_getBalance',
         params: [this.address, 'latest'],
-        id: 42,
+        id: this.networkId[this.network]
     };
     return new Promise((resolve) => {
-      fetch('https://kovan.infura.io/Y80MvxYEzKUddrYMy9Xj', {
+      fetch(`https://${this.network}.infura.io/Y80MvxYEzKUddrYMy9Xj`, {
           method: 'POST',
           body: JSON.stringify(ethGetBalance),
           headers: new Headers({
@@ -159,10 +167,10 @@ async signTransaction(txParams) {
                 jsonrpc: '2.0',
                 method: 'eth_sendRawTransaction',
                 params: [rawTx],
-                id: 42 // 選べるようにする
+                id: this.networkId[this.network]
             };
             return new Promise((resolve) => {
-                fetch('https://kovan.infura.io/Y80MvxYEzKUddrYMy9Xj', {
+                fetch(`https://${this.network}.infura.io/Y80MvxYEzKUddrYMy9Xj`, {
                     method: 'POST',
                     body: JSON.stringify(ethSendRawTransaction),
                     headers: new Headers({
@@ -188,10 +196,10 @@ async signTransaction(txParams) {
                 },
                     'latest'
             ],
-            id: 42
+            id: this.networkId[this.network]
         };
         return new Promise(resolve => {
-            fetch('https://kovan.infura.io/Y80MvxYEzKUddrYMy9Xj', {
+            fetch(`https://${this.network}.infura.io/Y80MvxYEzKUddrYMy9Xj`, {
                 method: 'POST',
                 body: JSON.stringify(ethCall),
                 headers: new Headers({

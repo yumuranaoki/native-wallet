@@ -7,6 +7,7 @@ import enterPasswordReducer from './enterPassword';
 import signUpReducer from './signUp';
 import signInReducer from './signIn';
 import walletReducer from './wallet';
+import networkReducer from './network';
 
 const reducer = combineReducers({
   walletProfileReducer,
@@ -16,6 +17,7 @@ const reducer = combineReducers({
   enterPasswordReducer,
   signUpReducer,
   signInReducer,
+  networkReducer,
   walletReducer,
 });
 

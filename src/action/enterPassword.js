@@ -46,6 +46,7 @@ const finishedEnterPassword = password => async (dispatch) => {
   const wallet = new Wallet(
     mnemonicWord,
     password,
+    'kovan'
   );
   await wallet.generatePrivateKey();
   await wallet.generatePublicKey();

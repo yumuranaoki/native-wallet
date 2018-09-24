@@ -13,6 +13,9 @@ const ChatStck = createStackNavigator({
     }, {
       contentComponent: FriendDrawerConnected,
       drawerWidth: 300,
+    }),
+    navigationOptions: ({ navigation }) => ({
+      
     })
   },
   Chat: {

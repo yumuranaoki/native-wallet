@@ -21,7 +21,8 @@ export const signIn = (accountId, password, mnemonicWord) => async (dispatch) =>
   try {
     const wallet = new Wallet(
       mnemonicWord,
-      password
+      password,
+      'kovan'
     );
     await wallet.generatePrivateKey();
     await wallet.generatePublicKey();

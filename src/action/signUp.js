@@ -32,6 +32,7 @@ export const setUpAccount = (accountName, accountId, password, passwordConfirmat
       const wallet = new Wallet(
         null,
         password,
+        'kovan',
       );
       await wallet.setMnemonicWord();
       await wallet.generatePrivateKey();

@@ -74,6 +74,14 @@ class RecentChat extends Component {
     this.props.changeModalState();
   }
 
+  moveToChatFromRecentData = (id, address, partner) => {
+    this.props.navigation.navigate('Chat', {
+      id,
+      address,
+      accountName: partner,      
+    });
+  }
+
   render() {
     const {
       modalVisible,
@@ -129,6 +137,7 @@ class RecentChat extends Component {
           renderItem={({ item }) => (
             <TouchableOpacity
               style={styles.recentChatData}
+              onPress={() => this.moveToChatFromRecentData(item.id, item.address, item.partner)}
             >
               <View
                 style={styles.accountName}

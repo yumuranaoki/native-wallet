@@ -5,6 +5,7 @@ import { sendEther } from '../action/walletProfile';
 const mapStateToProps = state => ({
   wallet: state.walletReducer.wallet,
   balance: state.walletProfileReducer.balance,
+  accountName: state.accountReducer.accountName,
 });
 
 const mapDispatchToProps = dispatch => ({

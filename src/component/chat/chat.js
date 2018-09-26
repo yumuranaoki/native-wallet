@@ -87,8 +87,6 @@ class Chat extends Component {
       console.log(error);
     }
     this.getChatConent();
-    this.registerRoom();
-    console.log(this.props.navigation.state);
   }
 
   getChatConent = () => {
@@ -96,6 +94,9 @@ class Chat extends Component {
     .ref(`${this.state.userId}/${this.state.partnerId}`)
     .on('value', snapshot => {
       const contents = snapshot.val();
+      if (contents == null) {
+        this.registerRoom();
+      }
       // async awaitでrewrite
       this.setState({ contents });
     });
@@ -106,7 +107,8 @@ class Chat extends Component {
     .ref(`room${this.state.userId}/${this.state.partnerId}`)
     .set({
       partner: this.state.partnerAccountName,
-      lastMessage: ''
+      lastMessage: '',
+      address: this.state.address,
     });
   }
 
@@ -125,18 +127,27 @@ class Chat extends Component {
     });
     this.setState({ content: '' });
     
+    this.firebaseDatabase
+    .ref(`${this.state.partnerId}/${this.state.userId}`)
+    .remove();
+    this.firebaseDatabase
+    .ref(`room${this.state.partnerId}/${this.state.userId}`)
+    .remove();
+
     // reactのライフサイクルメソッドで適応できる？
     this.firebaseDatabase
     .ref(`room${this.state.userId}/${this.state.partnerId}`)
     .set({
       partner: this.state.partnerAccountName,
-      lastMessage: content
+      lastMessage: content,
+      address: this.state.address,
     });
     this.firebaseDatabase
     .ref(`room${this.state.partnerId}/${this.state.userId}`)
     .set({
-      // 自分のaccountName
-      lastMessage: content
+      partner: this.props.accountName,
+      lastMessage: content,
+      address: this.props.wallet.address,
     });
   }
 
@@ -145,8 +156,6 @@ class Chat extends Component {
       // send ether
       const value = Number(content);
       const { wallet, balance } = this.props;
-      console.log(wallet);
-      console.log(balance);
       await this.props.sendEther(wallet, balance, this.state.address, value);
       
       // send message 
@@ -165,16 +174,25 @@ class Chat extends Component {
       this.setState({ content: '' });
 
       this.firebaseDatabase
+      .ref(`${this.state.partnerId}/${this.state.userId}`)
+      .remove();
+      this.firebaseDatabase
+      .ref(`room${this.state.partnerId}/${this.state.userId}`)
+      .remove();
+
+      this.firebaseDatabase
       .ref(`room${this.state.userId}/${this.state.partnerId}`)
       .set({
         partner: this.state.partnerAccountName,
         lastMessage: `${Number(content).toString()}Ether送信しました`,
+        address: this.state.address,
       });
       this.firebaseDatabase
       .ref(`room${this.state.partnerId}/${this.state.userId}`)
       .set({
-        // 自分のaccountName
+        partner: this.props.accountName,
         lastMessage: `${Number(content).toString()}Ether送信しました`,
+        address: this.props.wallet.address,
       });
     }
   }

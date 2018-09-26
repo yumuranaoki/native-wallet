@@ -31,6 +31,8 @@ export const enterPassword = password => async (dispatch) => {
     const jsonResult = await result.json();
     if (jsonResult.result === 'success') {
       dispatch(finishedEnterPassword(password));
+      const accountName = jsonResult.account_name;
+      dispatch(getUserAccountInformation(accountName));
     }
   } catch (error) {
     console.log(error);
@@ -62,4 +64,9 @@ const setUpWallet = wallet => ({
 
 const afterFinishedEnterPassword = () => ({
   type: 'AFTER_FINISHED_ENTER_PASSWORD',
+});
+
+const getUserAccountInformation = accountName => ({
+  type: 'GET_USER_ACCOUNT_INFORMATION',
+  accountName
 });

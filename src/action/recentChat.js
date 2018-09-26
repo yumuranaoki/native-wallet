@@ -40,7 +40,10 @@ export const getUsers = () => async (dispatch) => {
     const recentChatData = [];
     if (recentChat) {
       Object.keys(recentChat).forEach(key => {
-        recentChatData.push(recentChat[key]);
+        const oneOfRecentChat = recentChat[key];
+        oneOfRecentChat.id = key;
+        recentChatData.push(oneOfRecentChat);
+        console.log(oneOfRecentChat);
       });
     }
     dispatch(finishedGetUsers(recentChatData));

@@ -9,6 +9,9 @@ import {
   AsyncStorage,
   FlatList,
 } from 'react-native';
+import {
+  SafeAreaView
+} from 'react-navigation';
 import 'core-js/es6/map';
 import 'core-js/es6/symbol';
 import 'core-js/fn/symbol/iterator';
@@ -94,8 +97,8 @@ class RecentChat extends Component {
     const styles = StyleSheet.create({
       container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'stretch'
+        alignItems: 'stretch',
+        backgroundColor: 'white',
       },
       modalContainer: {
         flex: 1,
@@ -127,10 +130,24 @@ class RecentChat extends Component {
         flex: 2,
         alignItems: 'center'
       },
+      headerText: {
+        marginTop: 10,
+        marginLeft: 10,
+        marginBottom: 10,
+        fontSize: 20,
+        fontWeight: '600',
+      },
     });
     
     return (
-      <View style={styles.container}>
+      <SafeAreaView
+        style={styles.container}
+      >
+        <Text
+          style={styles.headerText}
+        >
+          トーク一覧
+        </Text>
         <FlatList
           data={recentChatData}
           keyExtractor={(item, index) => index.toString()}
@@ -187,7 +204,7 @@ class RecentChat extends Component {
             </View>
           </View>
         </Modal>
-      </View>
+      </SafeAreaView>
     );
   }
 }

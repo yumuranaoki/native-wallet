@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import {
   View,
-  Text,
+  Image,
   TextInput,
   StyleSheet,
-  TouchableHighlight,
+  TouchableOpacity, 
 } from 'react-native';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 class EnterPassword extends Component {
   componentDidUpdate() {
@@ -22,10 +23,37 @@ class EnterPassword extends Component {
         alignItems: 'center',
       },
       textInput: {
-        width: 200,
+        flex: 1,
         height: 50,
-        borderBottomColor: 'black',
-        borderBottomWidth: 1,
+        backgroundColor: '#e0e0e0',        
+      },
+      passwordText: {
+        fontSize: 18,
+        fontWeight: '400',
+        marginBottom: 40,
+      },
+      passwordInputInline: {
+        flexDirection: 'row',
+      },
+      leftVerge: {
+        backgroundColor: '#e0e0e0',
+        borderTopLeftRadius: 10,
+        borderBottomLeftRadius: 10,
+        marginLeft: 30,
+        height: 50,
+        width: 10,
+      },
+      rightVerge: {
+        backgroundColor: '#e0e0e0',
+        borderTopRightRadius: 10,
+        borderBottomRightRadius: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: 30,
+        paddingRight: 10,
+      },
+      image: {
+        marginBottom: 50,
       }
     });
 
@@ -39,22 +67,33 @@ class EnterPassword extends Component {
 
     return (
       <View style={styles.container}>
-        <Text>パスワードを入力してください</Text>
-        <TextInput
-          onChangeText={text => onChangePasswordText(text)}
-          secureTextEntry={security}
-          style={styles.textInput}
+        <Image
+          source={require('../../../assets/image/pwallet-logo.png')}
+          style={styles.image}
         />
-        <TouchableHighlight
-          onPress={() => changeSecurity()}
+        <View
+          style={styles.passwordInputInline}
         >
-          <Text>パスワードを{security ? '' : '非'}表示</Text>
-        </TouchableHighlight>
-        <TouchableHighlight
-          onPress={() => enterPassword(password)}
-        >
-          <Text>Enter</Text>
-        </TouchableHighlight>
+          <View
+            style={styles.leftVerge}
+          />
+          <TextInput
+            onChangeText={text => onChangePasswordText(text)}
+            secureTextEntry={security}
+            style={styles.textInput}
+            onSubmitEditing={() => enterPassword(password)}
+            placeholder='パスワードを入力'
+          />
+          <View
+            style={styles.rightVerge}
+          >
+            <TouchableOpacity
+              onPress={() => changeSecurity()}
+            >
+              {security ? <Entypo name='eye-with-line' size={16} /> : <Entypo name='eye' size={16} />}
+            </TouchableOpacity>
+          </View>
+        </View>
       </View>
     );
   }

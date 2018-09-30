@@ -1,30 +1,48 @@
-import { createTabNavigator, createDrawerNavigator } from 'react-navigation';
-import { Dimensions } from 'react-native';
+import React from 'react';
+import { createBottomTabNavigator, } from 'react-navigation';
+import Entypo from 'react-native-vector-icons/Entypo';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import ChatStack from '../component/chat/index';
-import FriendDrawerConnected from '../container/friendDrawer';
 import WalletProfileConnected from '../container/walletProfile';
 import ProfileStack from '../component/profile/index';
 
-const { height, width } = Dimensions.get('window');
-const oneThirdWidth = width / 3;
-
-const SignedUserNavigator = createTabNavigator({
-  Chat: ChatStack,
-  Wallet: WalletProfileConnected,
-  ProfileStack,
-}, {
-  tabBarPosition: 'bottom',
-  tabBarOptions: {
-    tabStyle: {
-      borderWidth: 3,
-      borderColor: 'black',
-      width: oneThirdWidth,
-    },
-    activeTintColor: 'black',
-    activeBackgroundColor: '#FF7367',
-    inactiveTintColor: 'black',
-    inactiveBackgroundColor: 'white',
-  }
+const SignedUserNavigator = createBottomTabNavigator({
+  Chat: {
+    screen: ChatStack,
+    navigationOptions: {
+      tabBarIcon: ({ tintColor, focused }) => (
+        <Entypo
+          name={'chat'}
+          size={focused ? 24 : 16}
+          style={{ color: tintColor }}
+        />
+      ),
+    }
+  },
+  Wallet: {
+    screen: WalletProfileConnected,
+    navigationOptions: {
+      tabBarIcon: ({ tintColor, focused }) => (
+        <Entypo
+          name={'wallet'}
+          size={focused ? 24 : 16}
+          style={{ color: tintColor }}
+        />
+      ),
+    }
+  },
+  Profile: {
+    screen: ProfileStack,
+    navigationOptions: {
+      tabBarIcon: ({ tintColor, focused }) => (
+        <Ionicons
+          name={'ios-person'}
+          size={focused ? 24 : 16}
+          style={{ color: tintColor }}
+        />
+      ),
+    }
+  },
 });
 
 export default SignedUserNavigator;

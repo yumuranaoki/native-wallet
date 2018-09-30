@@ -15,7 +15,7 @@ const ChatStck = createStackNavigator({
       drawerWidth: 300,
     }),
     navigationOptions: ({ navigation }) => ({
-      
+      header: null,
     })
   },
   Chat: {

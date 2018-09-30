@@ -31,8 +31,9 @@ export const changeFollowButtonAbility = () => ({
 
 export const getUsers = () => async (dispatch) => {
   const userId = await AsyncStorage.getItem('userId');
-  firebase.database().ref(`room${userId}`)
+  firebase.database().ref(`room${userId}`).orderByChild('timestamp').limitToFirst(5)
   .on('value', snapshot => {
+    console.log(snapshot);
     const recentChat = snapshot.val();
     // recentChatDataにchat相手のaccountName、lastMessageを持つ
     // firebaseのデータ構造を変える（accountNameも持つようにする）
@@ -43,9 +44,16 @@ export const getUsers = () => async (dispatch) => {
         const oneOfRecentChat = recentChat[key];
         oneOfRecentChat.id = key;
         recentChatData.push(oneOfRecentChat);
-        console.log(oneOfRecentChat);
       });
     }
+    console.log(recentChatData);
+    recentChatData.sort((a, b) => {
+      if (a.timestamp >= b.timestamp) {
+        return -1;
+      }
+      return 1;
+    });
+    console.log(recentChatData);
     dispatch(finishedGetUsers(recentChatData));
   });
 };

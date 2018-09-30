@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   TextInput,
   FlatList,
-  Modal,
-  TouchableOpacity,
-  Button,
   AsyncStorage,
+  SafeAreaView,
 } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { searchBar, SearchBar } from 'react-native-elements';
 import FriendCard from './friendCard';
 
 class FreindDrawer extends Component {
@@ -36,32 +35,59 @@ class FreindDrawer extends Component {
     const styles = StyleSheet.create({
       container: {
         flex: 1,
-        backgroundColor: '#f1f1f1',
+        backgroundColor: 'white',
         alignItems: 'center',
       },
       topItem: {
-        paddingTop: 20,
+        paddingTop: 10,
         height: 70,
-        width: 300,
-        justifyContent: 'center',
+        width: 300, 
         alignItems: 'center',
-        backgroundColor: '#FF7367',
+        backgroundColor: '#191970',
+        flexDirection: 'row',
       },
       searchBar: {
-        borderColor: 'black',
-        borderWidth: 3,
         backgroundColor: '#e0e0e0',
-        width: 200,
-        height: 30
+        width: 300,
+        height: 30,
+        borderTopRightRadius: 10,
+        borderBottomRightRadius: 10,
+        flex: 1,
+        paddingTop: 10,
+        paddingRight: 10,
+        paddingBottom: 10,
+        marginRight: 10,
+      },
+      searchIcon: {
+        padding: 10,
+      },
+      verge: {
+        backgroundColor: '#e0e0e0',
+        borderTopLeftRadius: 10,
+        borderBottomLeftRadius: 10,
+        height: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginLeft: 10,
       },
     });
 
     return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <View style={styles.topItem}>
+          <View
+            style={styles.verge}
+          >
+            <Ionicons
+              name='ios-search'
+              size={16}
+              style={styles.searchIcon}
+            />
+          </View>
           <TextInput
             style={styles.searchBar}
             value={accountId}
+            placeholder='ユーザーIDを入力'
             onChangeText={text => onChangeAccountIdText(text)}
             returnKeyType='search'
             onSubmitEditing={() => onSubmitAccountId(accountId)}
@@ -81,7 +107,7 @@ class FreindDrawer extends Component {
           }
           keyExtractor={(item, index) => index.toString()}
         />
-      </View>
+      </SafeAreaView>
     );
   }
 }

@@ -5,65 +5,16 @@ import {
   StyleSheet,
   TextInput,
   FlatList,
-  Dimensions,
   TouchableOpacity,
   AsyncStorage,
   Button,
+  Dimensions,
 } from 'react-native';
 import firebase from '../../util/firebase';
 
-const { height, width } = Dimensions.get('window');
+const width = Dimensions.get('window').width;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  searchBar: {
-    borderColor: 'black',
-    borderWidth: 3,
-    backgroundColor: '#e0e0e0',
-    width: 250,
-    height: 30
-  },
-  bottomItem: {
-    height: 40,
-    width,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#FF7367',
-    flexDirection: 'row',
-  },
-  sendButton: {
-    height: 30,
-    borderColor: 'black',
-    borderWidth: 3,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginLeft: 10,
-    backgroundColor: '#e0e0e0'
-  },
-  myContent: {
-    alignItems: 'flex-end',
-    width,
-  },
-  othersContent: {
-    alignItems: 'flex-start',
-    width,
-  },
-  content: {
-    width: 180,
-    borderColor: 'black',
-    borderWidth: 3,
-    marginTop: 20,
-    marginLeft: 20,
-    marginRight: 20,
-    backgroundColor: 'white',
-  },
-});
-
-class Chat extends Component { 
+class Chat extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -72,9 +23,10 @@ class Chat extends Component {
       partnerAccountName: this.props.navigation.getParam('accountName'),
       address: this.props.navigation.getParam('address'),
       content: '', // TextInputの値
-      contents: null
+      contents: null,
+      limit: 20,
+      allowScrollToEnd: true,
     };
-
   }
 
   async componentDidMount() {
@@ -87,28 +39,45 @@ class Chat extends Component {
       console.log(error);
     }
     this.getChatConent();
+    //setTimeOutでfalse
+  }
+
+  componentDidUpdate() {
+    // renderされたことをここで管理
   }
 
   getChatConent = () => {
     this.firebaseDatabase
-    .ref(`${this.state.userId}/${this.state.partnerId}`)
+    .ref(`${this.state.userId}/${this.state.partnerId}`).limitToLast(this.state.limit)
     .on('value', snapshot => {
       const contents = snapshot.val();
       if (contents == null) {
         this.registerRoom();
       }
-      // async awaitでrewrite
-      this.setState({ contents });
+      this.props.setContents(contents);
     });
+  };
+
+  getChatConentMore = () => {
+    this.setState({ limit: this.state.limit + 10 });
+    this.getChatConent();
+  }
+
+  scrollToEnd = () => {
+    if (this.state.allowScrollToEnd) {
+      this.scrollView.scrollToEnd({ animated: false });
+    }
+    setTimeout(() => this.setState({ allowScrollToEnd: false }), 300);
   }
 
   registerRoom = () => {
     this.firebaseDatabase
     .ref(`room${this.state.userId}/${this.state.partnerId}`)
-    .set({
+    .push({
       partner: this.state.partnerAccountName,
       lastMessage: '',
       address: this.state.address,
+      timestamp: Date.now(),
     });
   }
 
@@ -141,6 +110,7 @@ class Chat extends Component {
       partner: this.state.partnerAccountName,
       lastMessage: content,
       address: this.state.address,
+      timestamp: Date.now(),
     });
     this.firebaseDatabase
     .ref(`room${this.state.partnerId}/${this.state.userId}`)
@@ -148,6 +118,7 @@ class Chat extends Component {
       partner: this.props.accountName,
       lastMessage: content,
       address: this.props.wallet.address,
+      timestamp: Date.now(),
     });
   }
 
@@ -173,12 +144,6 @@ class Chat extends Component {
       });
       this.setState({ content: '' });
 
-      this.firebaseDatabase
-      .ref(`${this.state.partnerId}/${this.state.userId}`)
-      .remove();
-      this.firebaseDatabase
-      .ref(`room${this.state.partnerId}/${this.state.userId}`)
-      .remove();
 
       this.firebaseDatabase
       .ref(`room${this.state.userId}/${this.state.partnerId}`)
@@ -186,6 +151,7 @@ class Chat extends Component {
         partner: this.state.partnerAccountName,
         lastMessage: `${Number(content).toString()}Ether送信しました`,
         address: this.state.address,
+        timestamp: Date.now(),
       });
       this.firebaseDatabase
       .ref(`room${this.state.partnerId}/${this.state.userId}`)
@@ -193,6 +159,7 @@ class Chat extends Component {
         partner: this.props.accountName,
         lastMessage: `${Number(content).toString()}Ether送信しました`,
         address: this.props.wallet.address,
+        timestamp: Date.now(),
       });
     }
   }
@@ -200,14 +167,67 @@ class Chat extends Component {
   render() {
     const contentsData = [];
     const {
-      contents,
+      contents
+    } = this.props;
+    const {
       userId,
     } = this.state;
+
     if (contents) {
       Object.keys(contents).forEach(index => {
         contentsData.push({ content: contents[index].content, userId: contents[index].userId });
       });
     }
+
+    const styles = StyleSheet.create({
+      container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+      },
+      searchBar: {
+        borderColor: 'black',
+        borderWidth: 3,
+        backgroundColor: '#e0e0e0',
+        width: 250,
+        height: 30
+      },
+      bottomItem: {
+        height: 40,
+        width,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#FF7367',
+        flexDirection: 'row',
+      },
+      sendButton: {
+        height: 30,
+        borderColor: 'black',
+        borderWidth: 3,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginLeft: 10,
+        backgroundColor: '#e0e0e0'
+      },
+      myContent: {
+        alignItems: 'flex-end',
+        width,
+      },
+      othersContent: {
+        alignItems: 'flex-start',
+        width,
+      },
+      content: {
+        width: 180,
+        borderColor: 'black',
+        borderWidth: 3,
+        marginTop: 20,
+        marginLeft: 20,
+        marginRight: 20,
+        backgroundColor: 'white',
+      },
+    });
+
     return (
       <View style={styles.container}>
         <FlatList
@@ -226,6 +246,9 @@ class Chat extends Component {
             }
           }
           keyExtractor={(item, index) => index.toString()}
+          onContentSizeChange={() => this.scrollToEnd()}
+          ref={(scrollView) => { this.scrollView = scrollView; }}
+          onMomentumScrollBegin={() => this.getChatConentMore()}
         />
         <View style={styles.bottomItem}>
           <TextInput
@@ -248,10 +271,6 @@ class Chat extends Component {
             <Text>E</Text>
           </TouchableOpacity>
         </View>
-        <Button
-          title='check'
-          onPress={() => console.log(this.props)}
-        />
       </View>
     );
   }

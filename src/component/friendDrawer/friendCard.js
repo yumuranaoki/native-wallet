@@ -78,26 +78,40 @@ class FriendCard extends Component {
         width: 300,
         height: 50,
         flexDirection: 'row',
-        borderBottomWidth: 1.5,
-        borderBottomColor: 'black',
         justifyContent: 'center',
+        borderWidth: 0.5,
+        borderColor: 'gray',
       },
       accountNameView: {
         flex: 2,
         alignItems: 'center',
         justifyContent: 'center',
-        borderColor: 'black',
-        borderWidth: 1.5,
       },
       accountName: {
         fontSize: 16,
       },
-      button: {
+      item: {
         flex: 1,
-        borderColor: 'black',
-        borderWidth: 1.5,
         alignItems: 'center',
         justifyContent: 'center',
+      },
+      talkButton: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderColor: '#191970',
+        borderWidth: 1,
+        borderRadius: 10,
+        width: 60,
+        height: 30,
+      },
+      followButton: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderColor: '#191970',
+        borderWidth: 1,
+        borderRadius: 10,
+        width: 60,
+        height: 30,
       }
     });
 
@@ -114,19 +128,27 @@ class FriendCard extends Component {
           {accountName}
         </Text>
       </View>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => this.moveToChat()}
+      <View
+        style={styles.item}
       >
-        <Text>chat</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => this.changeRelation()}
-        disabled={this.state.followButtonDisabled}
+        <TouchableOpacity
+          style={styles.talkButton}
+          onPress={() => this.moveToChat()}
+        >
+          <Text>トーク</Text>
+        </TouchableOpacity>
+      </View>
+      <View
+        style={styles.item}
       >
-        <Text>{following ? 'unfollow' : 'follow'}</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.followButton}
+          onPress={() => this.changeRelation()}
+          disabled={this.state.followButtonDisabled}
+        >
+          <Text>{following ? '追加' : '削除'}</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
   }

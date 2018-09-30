@@ -81,7 +81,7 @@ class Network extends Component {
         <Text
           style={styles.headerText}
         >
-          Select Network
+          ネットワークを選択
         </Text>
         <TouchableWithoutFeedback
           onPress={() => changeNetwork('mainnet', wallet)}

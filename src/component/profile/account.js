@@ -6,10 +6,16 @@ import {
   TouchableOpacity,
   TextInput,
   AsyncStorage,
+  SafeAreaView,
 } from 'react-native';
 import SInfo from 'react-native-sensitive-info';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 class Account extends Component {
+  static navigationOptions = {
+    header: null,
+  }
+
   state = {
     accountName: ''
   };
@@ -58,27 +64,66 @@ class Account extends Component {
     const styles = StyleSheet.create({
       container: {
         flex: 1,
+        backgroundColor: 'white',
       },
+      headerText: {
+        marginLeft: 10,
+        marginBottom: 10,
+        fontSize: 20,
+        fontWeight: '600',
+      },
+      backText: {
+        color: 'blue',
+        fontSize: 17,
+        fontWeight: '300',
+      },
+      back: {
+        marginTop: 10,
+        marginLeft: 10,
+        height: 40,
+      },
+      item: {
+        margin: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+      },
+      itemText: {
+        fontSize: 18,
+        fontWeight: '400',
+      }
     });
 
     return (
-      <View
+      <SafeAreaView
         style={styles.container}
       >
-        <TextInput
-          onChangeText={text => this.setState({ accountName: text })}
-        />
         <TouchableOpacity
-          onPress={() => this.changeProfile()}
+          style={styles.back}
+          onPress={() => this.props.navigation.goBack()}
         >
-          <Text>change profile</Text>
+          <Text style={styles.backText}>Back</Text>
         </TouchableOpacity>
+        <Text
+          style={styles.headerText}
+        >
+          アカウントの設定
+        </Text>
         <TouchableOpacity
           onPress={() => this.logout()}
+          style={styles.item}
         >
-          <Text>log out</Text>
+          <Text
+            style={styles.itemText}
+          >
+            log out
+          </Text>
+          <Entypo
+            name={'log-out'}
+            size={16}
+          />
         </TouchableOpacity>
-      </View>
+      </SafeAreaView>
     );
   }
 }

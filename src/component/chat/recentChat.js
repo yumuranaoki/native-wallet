@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  Modal,
   Dimensions,
   TouchableOpacity,
   AsyncStorage,
@@ -12,6 +11,7 @@ import {
 import {
   SafeAreaView
 } from 'react-navigation';
+import Modal from 'react-native-modal';
 import 'core-js/es6/map';
 import 'core-js/es6/symbol';
 import 'core-js/fn/symbol/iterator';
@@ -72,9 +72,11 @@ class RecentChat extends Component {
     this.props.navigation.navigate('Chat', {
       id: this.props.searchedUser.id || '',
       accountId: this.props.searchedUser.account_id || '',
+      accountName: this.props.searchedUser.account_name,
       address: this.props.searchedUser.address || '',
     });
     this.props.changeModalState();
+   console.log(this.props.searchedUser);
   }
 
   moveToChatFromRecentData = (id, address, partner) => {
@@ -103,16 +105,16 @@ class RecentChat extends Component {
       modalContainer: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'center', 
       },
       modalBackground: {
         backgroundColor: 'white',
         height: height - 320,
         width: width - 100,
-        borderColor: 'black',
-        borderWidth: 1.5,
-        justifyContent: 'center',
-        alignItems: 'center',
+        borderRadius: 20,
+        padding: 20,
+        justifyContent: 'space-between',
+        alignItems: 'stretch',
       },
       recentChatData: {
         borderColor: '#ccc',
@@ -137,6 +139,39 @@ class RecentChat extends Component {
         fontSize: 20,
         fontWeight: '600',
       },
+      closeButton: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 80,
+        height: 30,
+        borderColor: '#800000',
+        borderWidth: 1,
+        borderRadius: 10,
+      },
+      searchedUserName: {
+        fontSize: 20,
+        fontWeight: '600',
+      },
+      buttons: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+      },
+      button: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderColor: '#191970',
+        borderWidth: 1,
+        borderRadius: 10,
+        width: 100,
+        height: 40,
+      },
+      buttonText: {
+        fontSize: 18,
+        fontWeight: '500',
+      },
+      closeButtonWrapper: {
+        alignItems: 'center',
+      }
     });
     
     return (
@@ -171,36 +206,53 @@ class RecentChat extends Component {
         />
 
         <Modal
-          visible={modalVisible}
+          isVisible={modalVisible}
           transparent={true}
-          animationType='slide'
+          onBackdropPress={() => changeModalState()}
         >
           <View style={styles.modalContainer}>
             <View style={styles.modalBackground}>
-              <Text>
+              <Text
+                style={styles.searchedUserName}
+              >
                 {searchedUserWrapper.account_name}
               </Text>
-              <TouchableOpacity
-                onPress={() => this.changeRelation()}
+              <View
+                style={styles.buttons}
               >
-                <Text>
-                  {following ? 'unfollow' : 'follow'}
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => this.moveToChat()}
+                <TouchableOpacity
+                  onPress={() => this.changeRelation()}
+                  style={styles.button}
+                >
+                  <Text
+                    style={styles.buttonText}
+                  >
+                    {following ? 'unfollow' : 'follow'}
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => this.moveToChat()}
+                  style={styles.button}
+                >
+                  <Text
+                    style={styles.buttonText}
+                  >
+                    chat
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <View
+                style={styles.closeButtonWrapper}
               >
-                <Text>
-                  chat
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => changeModalState()}
-              >
-                <Text>
-                  close
-                </Text>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => changeModalState()}
+                  style={styles.closeButton}
+                >
+                  <Text>
+                    閉じる
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </Modal>

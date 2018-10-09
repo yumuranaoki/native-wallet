@@ -10,6 +10,8 @@ import {
   Button,
   Dimensions,
 } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import firebase from '../../util/firebase';
 
 const width = Dimensions.get('window').width;
@@ -26,6 +28,7 @@ class Chat extends Component {
       contents: null,
       limit: 20,
       allowScrollToEnd: true,
+      textInputHeight: 50,
     };
   }
 
@@ -73,7 +76,7 @@ class Chat extends Component {
   registerRoom = () => {
     this.firebaseDatabase
     .ref(`room${this.state.userId}/${this.state.partnerId}`)
-    .push({
+    .set({
       partner: this.state.partnerAccountName,
       lastMessage: '',
       address: this.state.address,
@@ -164,6 +167,18 @@ class Chat extends Component {
     }
   }
 
+  changeTextInputHeight = height => {
+    let newHeight;
+    if (height < 30) {
+      newHeight = 30;
+    } else if (height <= 67) {
+      newHeight = height + 10;
+    } else {
+      newHeight = 77;
+    }
+    this.setState({ textInputHeight: newHeight });
+  }
+
   render() {
     const contentsData = [];
     const {
@@ -186,28 +201,27 @@ class Chat extends Component {
         alignItems: 'center',
       },
       searchBar: {
-        borderColor: 'black',
-        borderWidth: 3,
-        backgroundColor: '#e0e0e0',
+        borderRadius: 5,
+        backgroundColor: 'white',
         width: 250,
-        height: 30
+        height: this.state.textInputHeight,
       },
       bottomItem: {
-        height: 40,
+        height: this.state.textInputHeight + 10,
         width,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#FF7367',
+        backgroundColor: '#191970',
         flexDirection: 'row',
       },
       sendButton: {
         height: 30,
-        borderColor: 'black',
-        borderWidth: 3,
+        borderRadius: 5,
         justifyContent: 'center',
         alignItems: 'center',
         marginLeft: 10,
-        backgroundColor: '#e0e0e0'
+        backgroundColor: 'white',
+        width: 30,
       },
       myContent: {
         alignItems: 'flex-end',
@@ -219,8 +233,8 @@ class Chat extends Component {
       },
       content: {
         width: 180,
-        borderColor: 'black',
-        borderWidth: 3,
+        borderRadius: 10,
+        padding: 10,
         marginTop: 20,
         marginLeft: 20,
         marginRight: 20,
@@ -255,20 +269,26 @@ class Chat extends Component {
             style={styles.searchBar}
             value={this.state.content}
             onChangeText={text => this.setState({ content: text })}
-            returnKeyType='send'
-            onSubmitEditing={() => this.submitContent(this.state.content)}
+            multiline={true}
+            onContentSizeChange={event => this.changeTextInputHeight(event.nativeEvent.contentSize.height)}
           />
           <TouchableOpacity
             style={styles.sendButton}
-            onPress={() => this.submitContent(this.state.content)}
+            onPress={() => console.log(styles.bottomItem)}//this.submitContent(this.state.content)}
           >
-            <Text>M</Text>
+            <Ionicons
+              name='md-send'
+              size={20}
+            />
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.sendButton}
             onPress={() => this.submitEther(this.state.content)}
           >
-            <Text>E</Text>
+            <MaterialCommunityIcons
+              name='ethereum'
+              size={20}
+            />
           </TouchableOpacity>
         </View>
       </View>

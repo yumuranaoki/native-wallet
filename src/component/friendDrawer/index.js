@@ -8,7 +8,6 @@ import {
   SafeAreaView,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { searchBar, SearchBar } from 'react-native-elements';
 import FriendCard from './friendCard';
 
 class FreindDrawer extends Component {
@@ -22,6 +21,8 @@ class FreindDrawer extends Component {
       navigation,
       accountId,
       followeds,
+      followingInLocal,
+      unfollowingInLocal,
       onChangeAccountIdText,
       onSubmitAccountId,
     } = this.props;
@@ -31,6 +32,22 @@ class FreindDrawer extends Component {
         followedsArray.push(followed);
       });
     }
+    if (followingInLocal.length > 0) {
+      followingInLocal.forEach(f => {
+        followedsArray.push(f);
+      });
+    }
+    const followedsArrayLength = followedsArray.length;
+    if (unfollowingInLocal != null) {
+      for (let index = 0; index < followedsArrayLength; index++) {
+        if (followedsArray[index].id === unfollowingInLocal) {
+          followedsArray.splice(index, 1);
+          break;
+        }
+      }
+    }
+    
+    // sort検討
 
     const styles = StyleSheet.create({
       container: {
@@ -95,7 +112,7 @@ class FreindDrawer extends Component {
         </View>
         <FlatList
           data={followedsArray}
-          renderItem={({ item }) => 
+          renderItem={({ item }) =>
             <FriendCard
               id={item.id}
               accountId={item.account_id}

@@ -5,6 +5,8 @@ import {
   changeRelation,
   changeFollowButtonAbility,
   getUsers,
+  follow,
+  unfollow,
 } from '../action/recentChat';
 
 const mapStateToProps = state => ({
@@ -20,6 +22,8 @@ const mapDispatchToProps = dispatch => ({
   changeRelation: () => dispatch(changeRelation()),
   changeFollowButtonAbility: () => dispatch(changeFollowButtonAbility()),
   getUsers: () => dispatch(getUsers()),
+  follow: searchedUser => dispatch(follow(searchedUser)),
+  unfollow: followedId => dispatch(unfollow(followedId)),
 });
 
 const RecentChatConnected = connect(

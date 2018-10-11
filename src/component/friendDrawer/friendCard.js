@@ -146,7 +146,7 @@ class FriendCard extends Component {
           onPress={() => this.changeRelation()}
           disabled={this.state.followButtonDisabled}
         >
-          <Text>{following ? '追加' : '削除'}</Text>
+          <Text>{following ? '削除' : '追加'}</Text>
         </TouchableOpacity>
       </View>
     </View>

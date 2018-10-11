@@ -27,7 +27,7 @@ class RecentChat extends Component {
   changeRelation = async () => {
     this.props.changeFollowButtonAbility();
     const followerId = await AsyncStorage.getItem('userId');
-    const followedId = this.props.searchedUser.id;
+    const followedId = this.props.searchedUser.id;    
     const data = {
       followerId,
       followedId,
@@ -47,6 +47,15 @@ class RecentChat extends Component {
       } catch (err) {
         console.log(err);
       }
+
+      if (jsonResult.result === 'success') {
+        // ここでuserに必要な情報を受け取って、changeRelationに突っ込む。
+        // idが必要。indexつけて、idで検索かける？
+        // followedIdでいける
+        // this.props.changeRelation();
+        console.log(followedId);
+        this.props.unfollow(followedId);
+      }
     } else {
       try {
         const result = await fetch('http://localhost:3000/relationships', {
@@ -61,9 +70,12 @@ class RecentChat extends Component {
       } catch (err) {
         console.log(err);
       }
-    }
-    if (jsonResult.result === 'success') {
-      this.props.changeRelation();
+
+      if (jsonResult.result === 'success') {
+        // ここでuserに必要な情報を受け取って、changeRelationに突っ込む。
+        // id, account_id, account_nameが必要
+        this.props.follow(this.props.searchedUser);
+      }
     }
     this.props.changeFollowButtonAbility();
   }

@@ -5,16 +5,24 @@ export const changeModalState = () => ({
   type: 'CHANGE_MODAL_STATE',
 });
 
-export const onSubmitAccountId = accountId => (
-  function (dispatch) {
-    fetch(`http://localhost:3000/users/${accountId}`, {
-      mode: 'cors'
+export const onSubmitAccountId = accountId => async (dispatch) => {
+  const userId = await AsyncStorage.getItem('userId');
+  const data = {
+    userId,
+    accountId,
+  };
+  fetch('http://localhost:3000/users/show', {
+    mode: 'cors',
+    method: 'POST',
+    body: JSON.stringify(data),
+    headers: new Headers({
+      'Content-Type': 'application/json'
     })
-    .then(res => res.json())
-    .then(result => dispatch(finishedSubmitAccountId(result)))
-    .catch(err => console.log(err));
-  }
-);
+  })
+  .then(res => res.json())
+  .then(result => dispatch(finishedSubmitAccountId(result)))
+  .catch(err => console.log(err));
+};
 
 const finishedSubmitAccountId = result => ({
   type: 'FINISHED_SUBMIT_ACCOUNT_ID',
@@ -61,5 +69,15 @@ export const getUsers = () => async (dispatch) => {
 const finishedGetUsers = recentChatData => ({
   type: 'FINISHED_GET_USERS',
   recentChatData,
+});
+
+export const follow = searchedUser => ({
+  type: 'FOLLOW',
+  searchedUser,
+});
+
+export const unfollow = followedId => ({
+  type: 'UNFOLLOW',
+  followedId,
 });
 

@@ -13,6 +13,8 @@ const mapStateToProps = state => ({
   accountId: state.friendDrawerReducer.accountId,
   searchedUser: state.friendDrawerReducer.searchedUser,
   followeds: state.friendDrawerReducer.followeds,
+  followingInLocal: state.recentChatReducer.followingInLocal,
+  unfollowingInLocal: state.recentChatReducer.unfollowingInLocal,
 });
 
 const mapDispatchToProps = dispatch => ({

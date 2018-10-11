@@ -274,7 +274,7 @@ class Chat extends Component {
           />
           <TouchableOpacity
             style={styles.sendButton}
-            onPress={() => console.log(styles.bottomItem)}//this.submitContent(this.state.content)}
+            onPress={() => this.submitContent(this.state.content)}
           >
             <Ionicons
               name='md-send'
